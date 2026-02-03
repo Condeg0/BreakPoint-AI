@@ -1,0 +1,47 @@
+data:
+  raw_path: "data/raw/"
+  train_cutoff: "2022-12-31"
+  test_start: "2024-01-01"
+  target_col: "label"
+
+  # --- FULL PRODUCTION WHITELIST ---
+  features: [
+    # Core Diffs (Linear models love these)
+    "rank_diff", "ace_roll_diff", "df_roll_diff",
+    "1stIn_pct_roll_diff", "win_pct_roll_diff",
+
+    # Metadata / Context
+    "h2h_win_rate", "days_since", "rank", "opponent_rank",
+
+    # Raw Rolling Stats
+    "ace_roll", "opponent_ace_roll",
+    "win_pct_roll", "opponent_win_pct_roll",
+    "df_roll", "opponent_df_roll",
+    "1stIn_pct_roll", "opponent_1stIn_pct_roll"
+  ]
+
+  drop_cols: [
+    "match_id", "match_uid", "player", "opponent",
+    "match_num", "tourney_date", "label", "winner_name", "loser_name", "id"
+  ]
+
+  # Linear models handle One-Hot Encoding well
+  cat_cols: ["surface", "tourney_level", "round"]
+
+model:
+  name: "logreg"
+  # Note: Standard LogReg params (C=1.0, L2 penalty) are set in src/models/baselines.py
+  # These params below are required by the config schema but ignored by LogReg
+  seq_len: 10
+  hidden_size: 64
+  num_layers: 2
+  dropout: 0.0
+  n_estimators: 100
+  max_depth: 10
+
+train:
+  # Schema requirements (ignored by sklearn models except seed)
+  batch_size: 64
+  epochs: 1
+  learning_rate: 0.001
+  seed: 42

@@ -1,0 +1,5 @@
+batch_size: 64
+dropout: 0.24560663139139854
+hidden_size: 64
+learning_rate: 0.00021332363672273456
+num_layers: 2

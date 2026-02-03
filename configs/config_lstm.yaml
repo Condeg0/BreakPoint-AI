@@ -1,0 +1,42 @@
+data:
+  raw_path: "data/raw/"
+  train_cutoff: "2022-12-31"
+  test_start: "2024-01-01"
+  target_col: "label"
+
+  # 1. INPUT FEATURES (For RF/LogReg AND LSTM Context)
+  features: [
+    "rank_diff", "ace_roll_diff", "df_roll_diff",
+    "1stIn_pct_roll_diff", "win_pct_roll_diff",
+    "h2h_win_rate", "days_since", "rank", "opponent_rank"
+  ]
+
+  # 2. RAW SEQUENCE FEATURES (For LSTM History ONLY)
+  # These are the raw stats from past matches.
+  sequence_features: [
+    "ace", "df", "svpt", "1stIn", "1stWon", "2ndWon",
+    "rank", "winner_rank", "loser_rank"
+  ]
+
+  drop_cols: [
+    "match_id", "match_uid", "player", "opponent",
+    "match_num", "tourney_date", "label", "winner_name", "loser_name", "id"
+  ]
+
+  cat_cols: ["surface", "tourney_level", "round"]
+
+model:
+  name: "lstm"
+  seq_len: 10
+  hidden_size: 64
+  num_layers: 2
+  dropout: 0.24560663139139854
+  n_estimators: 200
+  max_depth: 8
+
+train:
+  batch_size: 64
+  epochs: 30
+  learning_rate: 0.00021332363672273456
+  seed: 42
+  tuning: True  # Set to True enable hyperparameter tuning
