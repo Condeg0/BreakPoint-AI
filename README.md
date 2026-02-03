@@ -62,6 +62,7 @@ tennis-forecast/
 ### 3. Model Diagram
 The system treats a match not as a static row, but as the collision of two histories.
 
+```\mermaid
 graph TD
     A[Player A History (10x7)] -->|LSTM| E1[Momentum Embedding A]
     B[Player B History (10x7)] -->|LSTM| E2[Momentum Embedding B]
@@ -69,6 +70,8 @@ graph TD
     E1 --> F
     E2 --> F
     F -->|Dense + Dropout| O[Win Probability]
+```
+
 
 
 
