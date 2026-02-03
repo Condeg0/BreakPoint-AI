@@ -1,0 +1,14 @@
+# --- Python & Environment ---
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+.vscode/
+.idea/
+.DS_Store
+
+# --- Project Specific ---
+# NEVER commit data or model artifacts
+data/
+artifacts/
