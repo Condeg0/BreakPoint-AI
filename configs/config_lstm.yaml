@@ -39,4 +39,4 @@ train:
   epochs: 30
   learning_rate: 0.00021332363672273456
   seed: 42
-  tuning: True  # Set to True enable hyperparameter tuning
+  tuning: False  # Set to True enable hyperparameter tuning

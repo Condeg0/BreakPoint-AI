@@ -108,7 +108,6 @@ def main():
         evaluator = Evaluator(run_dir)
 
         if config.model.name == "lstm":
-            # LSTM Evaluation Loop
             model.eval()
             all_probs = []
             all_targets = []
@@ -117,9 +116,7 @@ def main():
 
             with torch.no_grad():
                 for seq_a, seq_b, ctx, y in loader:
-                    seq_a = seq_a.to(device)
-                    seq_b = seq_b.to(device)
-                    ctx = ctx.to(device)
+                    seq_a, seq_b, ctx = seq_a.to(device), seq_b.to(device), ctx.to(device)
                     logits = model(seq_a, seq_b, ctx)
                     probs = torch.sigmoid(logits).cpu().numpy()
                     all_probs.extend(probs)
@@ -128,30 +125,64 @@ def main():
             y_prob = np.array(all_probs)
             y_true = np.array(all_targets)
 
-            # LSTM doesn't support SHAP yet, so we pass None
-            evaluator.generate_report(y_true, y_prob, model=None, model_name="lstm")
+            # --- PREPARE DATA FOR SHAP (FLATTEN) ---
+            print("   - Preparing data for LSTM SHAP...")
+            background_samples = []
+
+            # Using random indices to sample from Dataset
+            indices = np.random.choice(len(train_ds), 50, replace=False)
+
+            for idx in indices:
+                s_a, s_b, ctx, _ = train_ds[idx] # these are tensors
+                # Flatten everything into one long 1D array
+                flat = np.concatenate([
+                    s_a.numpy().flatten(),
+                    s_b.numpy().flatten(),
+                    ctx.numpy().flatten()
+                ])
+                background_samples.append(flat)
+
+            X_train_shap = np.array(background_samples)
+
+            # Create proper feature names for the flattened columns
+            seq_feats = config.data.sequence_features
+            ctx_feats = [preprocessor.feature_names[i] for i in preprocessor.ctx_indices]
+
+            all_names = []
+            # Add names for Player A Sequence
+            for i in range(config.model.seq_len):
+                for f in seq_feats: all_names.append(f"P1_{f}_t-{config.model.seq_len - i}")
+            # Add names for Player B Sequence
+            for i in range(config.model.seq_len):
+                for f in seq_feats: all_names.append(f"P2_{f}_t-{config.model.seq_len - i}")
+            # Add Context names
+            all_names.extend(ctx_feats)
+
+            evaluator.generate_report(y_true, y_prob, model=model, X_train=X_train_shap, model_name="lstm", feature_names=all_names)
 
         else:
             # Baselines (RF / LogReg)
-            # Use ctx_matrix (Context Features) instead of the raw X_matrix
             X_test = test_ds.ctx_matrix
             y_true = test_ds.y_vector
             y_prob = model.predict_proba(X_test)
 
-            # Reconstruct DataFrame for SHAP
-            # We map indices back to feature names using the preprocessor's map
-            # We only want the features corresponding to the ctx_indices
+            # Get Context Feature Names
             ctx_feature_names = [preprocessor.feature_names[i] for i in preprocessor.ctx_indices]
 
-            X_train_df = pd.DataFrame(train_ds.ctx_matrix, columns=ctx_feature_names)
+            # Sample training data for SHAP background
+            indices = np.random.choice(len(train_ds), 500, replace=False)
+            X_train_sample = train_ds.ctx_matrix[indices]
+            X_train_df = pd.DataFrame(X_train_sample, columns=ctx_feature_names)
 
             evaluator.generate_report(
                 y_true,
                 y_prob,
                 model=model,
                 X_train=X_train_df,
-                model_name=config.model.name
+                model_name=config.model.name,
+                feature_names=ctx_feature_names
             )
+
 
         # Print Text Metrics to Console
         from sklearn.metrics import roc_auc_score, accuracy_score
