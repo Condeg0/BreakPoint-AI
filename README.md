@@ -66,8 +66,11 @@ graph TD
     F -->|Dense + Dropout| O[Win Probability]
 ```
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> better-lstm-performance
 
 =======
 >>>>>>> better-lstm-performance
