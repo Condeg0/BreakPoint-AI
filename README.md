@@ -66,9 +66,6 @@ graph TD
     F -->|Dense + Dropout| O[Win Probability]
 ```
 
-
-
-
 ## 💻 Usage
 
 ### 1. Installation
