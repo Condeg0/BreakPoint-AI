@@ -12,3 +12,5 @@ venv/
 # NEVER commit data or model artifacts
 data/
 artifacts/
+notebooks/
+story.txt

@@ -5,7 +5,7 @@
 ![Optuna](https://img.shields.io/badge/Optuna-Optimization-green)
 ![License](https://img.shields.io/badge/License-MIT-grey)
 
-This project implements a **Hybrid Siamese LSTM** to model player momentum sequences and utilizes strict **Time-Series Validation** to eliminate look-ahead bias, a common pitfall in sports quantitative modeling.
+**BreakPoint AI** implements a **Hybrid Siamese LSTM** to model player momentum sequences, utilizing strict **Time-Series Validation** to eliminate look-ahead bias—a common pitfall in sports quantitative modeling.
 
 ## 🚀 Key Features
 
@@ -16,29 +16,24 @@ This project implements a **Hybrid Siamese LSTM** to model player momentum seque
 * **Bayesian Optimization:** Automated hyperparameter tuning using **Optuna** to optimize learning rates, dropout, and architecture depth.
 * **Institutional Evaluation:** Focuses on calibration (Reliability Diagrams) and SHAP values rather than just raw accuracy, mirroring financial risk modeling standards.
 
-## 📊 Performance Benchmark & Analysis
+## 📊 Performance Benchmark
 
-We compared the Siamese LSTM (Sequence-based) against a highly optimized Random Forest (Feature-based).
+The Siamese LSTM matches the performance of a highly optimized Random Forest baseline, validating the signal extraction capability of the recurrent architecture.
 
-| Model | Test AUC | Accuracy | Input Data |
+| Model | Test AUC | Accuracy | Architectural Insight |
 | :--- | :--- | :--- | :--- |
-| **Random Forest (Baseline)** | 0.7062 | 64.68% | **Engineered Features** (10-match Rolling Averages, Lag-1 differentials) |
-| **Siamese LSTM (Ours)** | **0.7060** | **64.61%** | **Raw Sequence History** (Time-steps $[t_{-10}, ..., t_{-1}]$) |
+| **Random Forest (Baseline)** | 0.7062 | 64.68% | Uses **Engineered Features** (10-match Rolling Averages). Strong baseline for tabular data, but requires manual feature extraction. |
+| **Siamese LSTM (Ours)** | **0.7060** | **64.61%** | Uses **Raw Sequence History**. The model successfully learned the latent feature representation (momentum) without manual smoothing, validating the deep learning signal extraction. |
 
-**Analysis:**
-While the Random Forest performs marginally better on tabular metrics, the Siamese LSTM achieves effectively identical performance **without manual feature engineering**. This validates that the recurrent architecture successfully extracted the latent "momentum" signal from raw match logs. In a production quantitative strategy, these models would likely be ensembled; the LSTM provides signal diversity (uncorrelated errors) derived from temporal dynamics that the tree-based model may miss.
-
-*> Note: In high-variance domains like ATP Tennis, an AUC > 0.70 represents a significant statistical edge against bookmaker closing lines.*
+*> Note: In high-variance domains like ATP Tennis, an AUC of ~0.70 represents a significant statistical edge against bookmaker closing lines.*
 
 ## 🛠️ System Architecture
 
 ### 1. Directory Structure
 ```text
 tennis-forecast/
-├── artifacts/             # [GIT IGNORED] Model checkpoints & binaries
-├── assets/                # Static plots for documentation
-├── configs/               # YAML Configuration files
-├── data/                  # [GIT IGNORED] Raw CSVs and processed datasets
+├── assets/                # Curated images for README (Calibration, SHAP)
+├── configs/               # YAML Configuration files (Hyperparams, Features)
 ├── src/
 │   ├── data.py            # Dual-Pipeline Dataset (Context vs. Sequence)
 │   ├── features.py        # Feature Engineering (Rolling, Lag, H2H)
@@ -47,7 +42,6 @@ tennis-forecast/
 │   ├── tuning.py          # Optuna Hyperparameter Search
 │   └── evaluation.py      # SHAP, Calibration, and Metrics generation
 └── main.py                # CLI Entrypoint
-```
 
 
 ### 2. Data Pipeline
@@ -62,6 +56,7 @@ tennis-forecast/
 ### 3. Model Diagram
 The system treats a match not as a static row, but as the collision of two histories.
 
+```\mermaid
 graph TD
     A[Player A History (10x7)] -->|LSTM| E1[Momentum Embedding A]
     B[Player B History (10x7)] -->|LSTM| E2[Momentum Embedding B]
@@ -69,6 +64,8 @@ graph TD
     E1 --> F
     E2 --> F
     F -->|Dense + Dropout| O[Win Probability]
+```
+
 
 
 
