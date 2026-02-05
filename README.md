@@ -65,9 +65,12 @@ graph TD
     E2 --> F
     F -->|Dense + Dropout| O[Win Probability]
 ```
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> better-lstm-performance
 
 ## 💻 Usage
 

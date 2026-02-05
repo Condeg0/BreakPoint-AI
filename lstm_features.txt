@@ -1,0 +1,24 @@
+output of:
+data = pd.read_csv('../data/processed/train_engineered.csv')
+data.columns
+Index(['match_uid', 'tourney_date', 'match_num', 'player', 'opponent',
+       'surface', 'tourney_level', 'round', 'label', 'rank', 'days_since',
+       'h2h_win_rate', 'ace_roll', 'df_roll', 'svpt_roll', '1stIn_roll',
+       '1stWon_roll', '2ndWon_roll', '1stIn_pct_roll', 'win_pct_roll',
+       'ace_lag', 'df_lag', 'svpt_lag', '1stIn_lag', '1stWon_lag',
+       '2ndWon_lag', '1stIn_pct_lag', 'win_pct_lag', 'ace', 'df', 'svpt',
+       '1stIn', '1stWon', '2ndWon', 'opponent_tourney_date',
+       'opponent_match_num', 'opponent_surface', 'opponent_tourney_level',
+       'opponent_round', 'opponent_rank', 'opponent_days_since',
+       'opponent_h2h_win_rate', 'opponent_ace_roll', 'opponent_df_roll',
+       'opponent_svpt_roll', 'opponent_1stIn_roll', 'opponent_1stWon_roll',
+       'opponent_2ndWon_roll', 'opponent_1stIn_pct_roll',
+       'opponent_win_pct_roll', 'opponent_ace_lag', 'opponent_df_lag',
+       'opponent_svpt_lag', 'opponent_1stIn_lag', 'opponent_1stWon_lag',
+       'opponent_2ndWon_lag', 'opponent_1stIn_pct_lag', 'opponent_win_pct_lag',
+       'opponent_ace', 'opponent_df', 'opponent_svpt', 'opponent_1stIn',
+       'opponent_1stWon', 'opponent_2ndWon', 'ace_roll_diff', 'df_roll_diff',
+       'win_pct_roll_diff', 'rank_diff', '1stIn_pct_roll_diff',
+       'svpt_roll_diff', 'ace_lag_diff', 'df_lag_diff', 'win_pct_lag_diff',
+       '1stIn_pct_lag_diff', 'svpt_lag_diff'],
+      dtype='str')

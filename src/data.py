@@ -20,7 +20,6 @@ class Preprocessor:
         self.seq_indices = []
 
     def fit(self, df: pd.DataFrame):
-        print(f"\n>>> 🛡️ PREPROCESSOR: Analyzing Feature Sets...")
 
         # 1. Identify "Context" Features (Rolling/Static)
         ctx_whitelist = set(self.config.data.features)
@@ -37,10 +36,6 @@ class Preprocessor:
 
         # Categorical features (Static context only usually)
         valid_cat = [c for c in self.config.data.cat_cols if c in available]
-
-        print(f"   Context Features: {len(valid_ctx)}")
-        print(f"   Sequence Features: {len(valid_seq)}")
-        print(f"   Total Numeric to Scale: {len(all_numeric)}")
 
         # Define transformations
         num_pipe = Pipeline([

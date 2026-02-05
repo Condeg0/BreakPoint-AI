@@ -7,10 +7,8 @@ data:
   # 1. INPUT FEATURES (Used by Random Forest)
   # These are the pre-calculated Rolling Stats and Static Context.
   features: [
-    "rank_diff",
-    "ace_roll_diff", "df_roll_diff",
-    "1stIn_pct_roll_diff", "win_pct_roll_diff",
-    "h2h_win_rate", "days_since",
+    "ace_roll_diff", "df_roll_diff", "1stIn_pct_roll_diff",
+    "win_pct_roll_diff", "h2h_win_rate", "days_since",
     "rank", "opponent_rank",
     # We include raw rolling averages too, as trees can find non-linear interactions
     "ace_roll", "opponent_ace_roll",
@@ -30,7 +28,7 @@ data:
     "match_num", "tourney_date", "label", "winner_name", "loser_name", "id"
   ]
 
-  cat_cols: ["surface", "tourney_level", "round"]
+  cat_cols: ["surface"]
 
 model:
   name: "rf"  # Switch to 'logreg' for Logistic Regression

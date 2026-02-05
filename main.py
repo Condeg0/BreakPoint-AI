@@ -26,7 +26,7 @@ def main():
     print(f"Loading config from {config_path}...")
     config = ProjectConfig.load(config_path)
 
-    # Setup Artifact Directory
+    # Setup Artifact Directory (Where output and model information will be saved)
     run_id = pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")
     run_dir = Path("artifacts") / config.model.name / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -42,7 +42,7 @@ def main():
     engineer = FeatureEngineer(rolling_window=10)
     full_feat_df = engineer.generate_features(full_df)
 
-    # Re-apply strict date split
+    # Apply date split
     train_df = full_feat_df[full_feat_df['tourney_date'] <= config.data.train_cutoff]
     val_df = full_feat_df[(full_feat_df['tourney_date'] > config.data.train_cutoff) &
                           (full_feat_df['tourney_date'] < config.data.test_start)]
@@ -66,11 +66,6 @@ def main():
     preprocessor = Preprocessor(config)
     preprocessor.fit(train_df)
     preprocessor.save(run_dir / "preprocessor.pkl")
-
-    # --- DEBUG: PRINT ACTUAL FEATURES USED ---
-    print(f"\n>>> 📋 MODEL FEATURE LIST ({len(preprocessor.feature_names)} Total):")
-    print(np.array(preprocessor.feature_names))
-    print("-" * 50)
 
     # 5. Create Datasets
     dataset_mode = "lstm" if config.model.name == "lstm" else "tabular"

@@ -21,19 +21,32 @@ class Trainer:
     def train(self, train_ds, val_ds):
         model_name = self.config.model.name
 
-        # --- DEBUG: Print First Batch ---
-        print("\n>>> DEBUG: Inspecting Training Data (First Batch)...")
+        # --- NEW CODE: FEATURE VERIFICATION ---
+        print("\n" + "="*50)
+        print(f">>> 🔍 FINAL FEATURE CHECK BEFORE TRAINING ({model_name.upper()})")
+        print("="*50)
+        
+        preproc = train_ds.preprocessor
+        
+        # 1. Get Context Features (Used by Baselines AND LSTM)
+        ctx_names = [preproc.feature_names[i] for i in preproc.ctx_indices]
+        print(f"\n[1] CONTEXT FEATURES (Static Input) - Count: {len(ctx_names)}")
+        print(f"    Used by: RF, LogReg, and LSTM (Fusion Layer)")
+        print(f"    List: {ctx_names}")
+
+        # 2. Get Sequence Features (Used by LSTM ONLY)
+        if model_name == "lstm":
+            seq_names = [preproc.feature_names[i] for i in preproc.seq_indices]
+            print(f"\n[2] SEQUENCE FEATURES (History Input) - Count: {len(seq_names)}")
+            print(f"    Used by: LSTM (Recurrent Layer History)")
+            print(f"    List: {seq_names}")
+            
+        print("\n" + "="*60 + "\n")
+
         if model_name == "lstm":
             # Just grab one item manually
             seq_a, seq_b, feats, y = train_ds[0]
             print(f"  Target: {y}")
-            print(f"  Context Shape: {feats.shape}")
-            print(f"  History A Shape: {seq_a.shape}")
-            print(f"  History B Shape: {seq_b.shape}")
-        else:
-            # For baselines, we now use ctx_matrix as the primary input
-            print(f"  Features Shape: {train_ds.ctx_matrix.shape}")
-        print("-" * 30 + "\n")
 
         if model_name == "lstm":
             return self._train_lstm(train_ds, val_ds)
@@ -51,7 +64,7 @@ class Trainer:
         # Baselines only use the Context Matrix (Rolling Stats + Metadata)
         X_train, y_train = train_ds.ctx_matrix, train_ds.y_vector
         X_val, y_val = val_ds.ctx_matrix, val_ds.y_vector
-
+        
         model.fit(X_train, y_train)
 
         train_probs = model.predict_proba(X_train)
