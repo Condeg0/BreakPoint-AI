@@ -30,6 +30,11 @@ class FeatureEngineer:
             df['match_uid'] = df['tourney_date'].astype(str) + "_" + df['match_num'].astype(str)
 
         common_cols = ['tourney_date', 'surface', 'tourney_level', 'round', 'match_num', 'match_uid']
+        
+        # PRESERVE INFERENCE FLAG
+        if 'is_inference' in df.columns:
+            common_cols.append('is_inference')
+            
         actual_common = [c for c in common_cols if c in df.columns]
 
         w_cols = {'winner_name': 'player', 'winner_id': 'player_id', 'loser_name': 'opponent', 'loser_id': 'opponent_id', 'winner_rank': 'rank', 'loser_rank': 'opponent_rank', 'w_ace': 'ace', 'w_df': 'df', 'w_svpt': 'svpt', 'w_1stIn': '1stIn', 'w_1stWon': '1stWon', 'w_2ndWon': '2ndWon', 'w_bpSaved': 'bpSaved', 'w_bpFaced': 'bpFaced'}
@@ -54,22 +59,18 @@ class FeatureEngineer:
 
         grouped = df.groupby('player')[cols_to_roll]
 
-        # 1. ROLLING WINDOW (Trend)
         rolling_stats = grouped.apply(lambda x: x.shift(1).rolling(window=self.window, min_periods=1).mean())
         if isinstance(rolling_stats.index, pd.MultiIndex):
             rolling_stats = rolling_stats.reset_index(level=0, drop=True)
         rolling_stats = rolling_stats.sort_index()
         rolling_stats.columns = [f"{c}_roll" for c in rolling_stats.columns]
 
-        # 2. LAG-1 FEATURES (Raw Last Match)
-        # We grab the exact stats from the previous match (shift 1) without averaging
         lag_stats = grouped.apply(lambda x: x.shift(1))
         if isinstance(lag_stats.index, pd.MultiIndex):
             lag_stats = lag_stats.reset_index(level=0, drop=True)
         lag_stats = lag_stats.sort_index()
         lag_stats.columns = [f"{c}_lag" for c in lag_stats.columns]
 
-        # Concat Original + Rolling + Lag
         return pd.concat([df, rolling_stats, lag_stats], axis=1)
 
     def _add_days_since(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -93,13 +94,15 @@ class FeatureEngineer:
         return df.drop(columns=['win'])
 
     def _pivot_to_match_format(self, long_df: pd.DataFrame) -> pd.DataFrame:
-        # Capture Rolling AND Lag columns
         roll_cols = [c for c in long_df.columns if '_roll' in c]
         lag_cols = [c for c in long_df.columns if '_lag' in c]
 
         meta_cols = ['match_uid', 'tourney_date', 'match_num', 'player', 'opponent', 'surface', 'tourney_level', 'round', 'label', 'rank', 'days_since', 'h2h_win_rate']
+        
+        # PRESERVE INFERENCE FLAG
+        if 'is_inference' in long_df.columns:
+            meta_cols.append('is_inference')
 
-        # Raw stats (for LSTM history)
         raw_cols = ['ace', 'df', 'svpt', '1stIn', '1stWon', '2ndWon']
 
         cols_to_keep = meta_cols + roll_cols + lag_cols + raw_cols
@@ -107,7 +110,8 @@ class FeatureEngineer:
 
         base = long_df[cols_to_keep].copy()
 
-        opp_keep_cols = [c for c in cols_to_keep if c != 'label' and c != 'opponent']
+        # PREVENT DUPLICATE FLAG (opponent_is_inference)
+        opp_keep_cols = [c for c in cols_to_keep if c not in ['label', 'opponent', 'is_inference']]
         opp_stats = long_df[opp_keep_cols].copy()
 
         opp_stats = opp_stats.rename(columns={'player': 'opponent'})
@@ -118,13 +122,11 @@ class FeatureEngineer:
         return merged
 
     def _add_diff_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        # Diff for Rolling
         features = ['ace_roll', 'df_roll', 'win_pct_roll', 'rank', '1stIn_pct_roll', 'svpt_roll']
         for f in features:
             if f in df.columns and f"opponent_{f}" in df.columns:
                 df[f"{f}_diff"] = df[f] - df[f"opponent_{f}"]
 
-        # Diff for Lag (Raw Last Match)
         lag_features = ['ace_lag', 'df_lag', 'win_pct_lag', '1stIn_pct_lag', 'svpt_lag']
         for f in lag_features:
             if f in df.columns and f"opponent_{f}" in df.columns:

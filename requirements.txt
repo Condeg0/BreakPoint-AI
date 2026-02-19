@@ -6,7 +6,7 @@ pyyaml>=6.0
 pydantic>=2.0
 tqdm>=4.66
 joblib>=1.3
-# Visualization & Explainability (Missing from your TOML)
 shap>=0.40.0
 matplotlib>=3.7.0
 seaborn>=0.12.0
+xgboost

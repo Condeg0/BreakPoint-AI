@@ -15,29 +15,22 @@ class Preprocessor:
         self.config = config
         self.pipeline = None
         self.feature_names = []
-        # We track indices to split the big matrix later
         self.feat_indices = []
         self.seq_indices = []
 
     def fit(self, df: pd.DataFrame):
-
-        # 1. Identify "Context" Features (Rolling/Static)
-        ctx_whitelist = set(self.config.data.features)
+        # Route to the new hierarchical config
+        ctx_whitelist = set(self.config.data.features.context)
         available = set(df.columns)
         valid_ctx = list(ctx_whitelist.intersection(available))
 
-        # 2. Identify "Sequence" Features (Raw Stats)
-        seq_whitelist = set(self.config.data.sequence_features)
+        seq_whitelist = set(self.config.data.features.sequence)
         valid_seq = list(seq_whitelist.intersection(available))
 
-        # Combine strictly for fitting the scaler (Union of all needed columns)
-        # We sort to ensure deterministic order
         all_numeric = sorted(list(set(valid_ctx + valid_seq)))
 
-        # Categorical features (Static context only usually)
-        valid_cat = [c for c in self.config.data.cat_cols if c in available]
+        valid_cat = [c for c in self.config.data.features.categorical if c in available]
 
-        # Define transformations
         num_pipe = Pipeline([
             ('imputer', SimpleImputer(strategy='median')),
             ('scaler', StandardScaler())
@@ -55,20 +48,13 @@ class Preprocessor:
 
         self.pipeline.fit(df)
 
-        # Store Feature Names and Indices for lookups later
         self.feature_names = [x.split("__")[-1] for x in self.pipeline.get_feature_names_out()]
-
-        # Map feature names to their index in the transformed matrix
         self.feat_map = {name: i for i, name in enumerate(self.feature_names)}
-
-        # Pre-calculate indices for fast slicing in Dataset
-        # We need to know which columns correspond to 'features' vs 'sequence_features'
-        # Note: Categorical features are one-hot encoded, so we need to find all their generated columns
 
         self.ctx_indices = []
         for f in valid_ctx:
              if f in self.feat_map: self.ctx_indices.append(self.feat_map[f])
-        # Add encoded categoricals to context
+        
         for cat in valid_cat:
             for name in self.feature_names:
                 if name.startswith(f"{cat}_"):
@@ -86,7 +72,7 @@ class Preprocessor:
         return self.pipeline.transform(df)
 
     def save(self, path: Path):
-        joblib.dump(self, path) # Save whole object to keep indices
+        joblib.dump(self, path)
 
     def load(self, path: Path):
         loaded = joblib.load(path)
@@ -105,22 +91,13 @@ class TennisDataset(Dataset):
         self.mode = mode
         self.seq_len = seq_len
 
-        # 1. Transform ALL features into a big matrix
         self.full_matrix = self.preprocessor.transform(self.df).astype(np.float32)
-
-        # 2. Pre-slice for speed
-        # Context Matrix: Rows x (Rolling + Static + OneHot)
         self.ctx_matrix = self.full_matrix[:, self.preprocessor.ctx_indices]
-
-        # Sequence Matrix: Rows x (Raw Stats)
-        # This contains the raw stats for every match, which we will look up for history
         self.seq_matrix = self.full_matrix[:, self.preprocessor.seq_indices]
 
-        # Store Dates
         self.dates = self.df['tourney_date'].values.astype('datetime64[D]').astype(np.int64)
 
-        # Target
-        target_col = self.preprocessor.config.data.target_col
+        target_col = self.preprocessor.config.data.features.target
         if target_col in self.df.columns:
             self.y_vector = self.df[target_col].values.astype(np.float32)
         else:
@@ -140,13 +117,9 @@ class TennisDataset(Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
-        # MODE 1: TABULAR (Random Forest / LogReg)
-        # Returns only the Context Vector (Rolling stats + Metadata)
         if self.mode == "tabular":
             return self.ctx_matrix[idx], self.y_vector[idx]
 
-        # MODE 2: LSTM (Deep Learning)
-        # Returns (History_A, History_B, Context, Label)
         row = self.df.iloc[idx]
         current_date = self.dates[idx]
 
@@ -164,8 +137,6 @@ class TennisDataset(Dataset):
             return np.zeros((self.seq_len, self.seq_matrix.shape[1]), dtype=np.float32)
 
         all_indices = self.player_history[player]
-
-        # Vectorized Date Filter (Strict Past)
         candidate_dates = self.dates[all_indices]
         mask = candidate_dates < current_date
         past_indices = all_indices[mask]
@@ -174,8 +145,6 @@ class TennisDataset(Dataset):
             return np.zeros((self.seq_len, self.seq_matrix.shape[1]), dtype=np.float32)
 
         selected_indices = past_indices[-self.seq_len:]
-
-        # LOOKUP in SEQ_MATRIX (Raw Stats)
         seq_data = self.seq_matrix[selected_indices]
 
         if len(seq_data) < self.seq_len:
@@ -203,7 +172,7 @@ def load_raw_merged(data_dir: Path) -> pd.DataFrame:
     return full_df
 
 def load_and_split(config) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    raw_path = Path(config.data.raw_path)
+    raw_path = Path(config.data.paths.raw_dir)
     if raw_path.is_dir():
         df = load_raw_merged(raw_path)
     else:
@@ -216,10 +185,13 @@ def load_and_split(config) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         mask = ~df['tourney_name'].str.contains("Davis Cup|Laver Cup", case=False, na=False)
         df = df[mask]
 
-    train = df[df['tourney_date'] <= config.data.train_cutoff].copy()
-    mask_val = (df['tourney_date'] > config.data.train_cutoff) & (df['tourney_date'] < config.data.test_start)
+    train_cutoff = config.data.temporal_splits.train_cutoff
+    test_start = config.data.temporal_splits.test_start
+
+    train = df[df['tourney_date'] <= train_cutoff].copy()
+    mask_val = (df['tourney_date'] > train_cutoff) & (df['tourney_date'] < test_start)
     val = df[mask_val].copy()
-    test = df[df['tourney_date'] >= config.data.test_start].copy()
+    test = df[df['tourney_date'] >= test_start].copy()
 
     print(f"Data Splitting Complete: Train={len(train)}, Val={len(val)}, Test={len(test)}")
     return train, val, test

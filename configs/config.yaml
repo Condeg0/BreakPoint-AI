@@ -1,0 +1,85 @@
+project:
+  name: "breakpoint_ai"
+
+data:
+  paths:
+    raw_dir: "data/raw/"
+    processed_dir: "data/processed/"
+    artifact_dir: "artifacts/"
+  temporal_splits:
+    train_cutoff: "2022-12-31"
+    test_start: "2024-01-01"
+  features:
+    context: 
+      - "rank_diff"
+      - "rank"
+      - "opponent_rank"
+      - "ace_roll_diff"
+      - "df_roll_diff"
+      - "win_pct_roll_diff"
+      - "h2h_win_rate"
+      - "days_since"
+    sequence: 
+      - "ace"
+      - "df"
+      - "svpt"
+      - "1stIn"
+      - "1stWon"
+      - "2ndWon"
+      - "rank"
+      - "winner_rank"
+      - "loser_rank"
+    categorical: 
+      - "surface"
+    target: "label"
+
+pipeline:
+  models_to_train: ["xgboost"]  # "lstm", "xgboost", "random_forest", "logistic_regression"
+  run_evaluation: true # boolean
+  use_stacking: false # boolean
+  inference_artifact_dir: "artifacts/20260219_164830" # Model to run inference
+  inference_input_file: "data/inference/upcoming_matches.csv"
+  inference_output_file: "data/inference/predictions.csv"
+
+models:
+  lstm:
+    architecture:
+      seq_len: 10
+      hidden_size: 64
+      num_layers: 2
+      dropout: 0.25
+    training:
+      batch_size: 64
+      epochs: 30
+      learning_rate: 0.0002
+      tuning_enabled: false
+  
+  xgboost:
+    hyperparameters:
+      n_estimators: 200
+      max_depth: 6
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+    training:
+      tuning_enabled: false
+
+  random_forest:
+    hyperparameters:
+      n_estimators: 200
+      max_depth: 8
+      min_samples_split: 2
+    training:
+      tuning_enabled: false
+
+  logistic_regression:
+    hyperparameters:
+      penalty: "l2"
+      C: 1.0
+      max_iter: 1000
+    training:
+      tuning_enabled: false
+
+  stacking:
+    meta_learner: "logistic_regression"
+    cv_folds: 5
