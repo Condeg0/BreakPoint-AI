@@ -174,7 +174,7 @@ F1 Score:    {metrics['f1']:.4f}
                     preds = []
 
                     # Infer dimensions from model config
-                    seq_len = model.config.model.seq_len
+                    seq_len = model.config.models.lstm.architecture.seq_len
                     input_dim = model.lstm.input_size
 
                     # Calculate split points

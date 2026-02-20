@@ -124,8 +124,57 @@ def main():
             
         model.load(model_dir / "model.joblib")
         predictions = model.predict_proba(ds.ctx_matrix)
+
+    elif args.model == "stacking":
+        from src.models.stacking import StackingMetaLearner
+        
+        # Load the Meta-Learner first to know which base models are required
+        stacker = StackingMetaLearner(config, artifact_dir).load()
+        base_preds = {}
+        
+        print(f"Executing base models for stacking ensemble: {stacker.model_names}")
+        for base_name in stacker.model_names:
+            model_dir = artifact_dir / base_name
+            
+            if base_name == "lstm":
+                with open(model_dir / "hyperparameters.json", "r") as f:
+                    seq_len = json.load(f)["architecture"]["seq_len"]
+                ds = TennisDataset(target_df, preprocessor, mode="lstm", seq_len=seq_len)
+                loader = torch.utils.data.DataLoader(ds, batch_size=64, shuffle=False)
+                
+                model = SiameseLSTM(config, ds.seq_matrix.shape[1], ds.ctx_matrix.shape[1]).to(device)
+                model.load_state_dict(torch.load(model_dir / "best_model.pt", map_location=device))
+                model.eval()
+                
+                probs = []
+                with torch.no_grad():
+                    for seq_a, seq_b, ctx, _ in loader:
+                        seq_a, seq_b, ctx = seq_a.to(device), seq_b.to(device), ctx.to(device)
+                        probs.extend(torch.sigmoid(model(seq_a, seq_b, ctx)).cpu().numpy().flatten())
+                base_preds[base_name] = np.array(probs)
+                
+            else:
+                ds = TennisDataset(target_df, preprocessor, mode="tabular")
+                if base_name == "random_forest":
+                    from src.models.baselines import RandomForestBaseline
+                    model = RandomForestBaseline(config)
+                elif base_name == "logistic_regression":
+                    from src.models.baselines import LogisticBaseline
+                    model = LogisticBaseline(config)
+                elif base_name == "xgboost":
+                    from src.models.xgb import XGBoostModel
+                    model = XGBoostModel(config)
+                    
+                model.load(model_dir / "model.joblib")
+                base_preds[base_name] = model.predict_proba(ds.ctx_matrix)
+                
+        # Generate final ensemble prediction
+        predictions = stacker.predict_proba(base_preds)
+
     else:
         raise ValueError(f"Inference not implemented for model: {args.model}")
+    
+
 
     # 5. Output
     results = target_df[['tourney_date', 'player', 'opponent', 'surface']].copy()

@@ -34,9 +34,11 @@ data:
     target: "label"
 
 pipeline:
-  models_to_train: ["xgboost"]  # "lstm", "xgboost", "random_forest", "logistic_regression"
+  models_to_train: ["stacking"]  # "lstm", "xgboost", "random_forest", "logistic_regression", "stacking" 
+  stacking_base_artifact_dir: 'artifacts/20260219_174038'
+  # To use stacking models need to be trained at the same time, thus they remain in the same directory
+  use_stacking: true  # boolean
   run_evaluation: true # boolean
-  use_stacking: false # boolean
   inference_artifact_dir: "artifacts/20260219_164830" # Model to run inference
   inference_input_file: "data/inference/upcoming_matches.csv"
   inference_output_file: "data/inference/predictions.csv"

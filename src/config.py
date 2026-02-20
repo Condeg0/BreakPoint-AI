@@ -27,6 +27,7 @@ class PipelineConfig(BaseModel):
     models_to_train: list[str]
     use_stacking: bool
     run_evaluation: bool
+    stacking_base_artifact_dir: Optional[str] = None
     inference_artifact_dir: Optional[str] = None
     inference_input_file: Optional[str] = None
     inference_output_file: Optional[str] = None
