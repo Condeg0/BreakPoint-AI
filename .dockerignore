@@ -1,0 +1,34 @@
+# Version Control
+.git
+.gitignore
+.github/
+
+# Environment and Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+env/
+
+# Data (Strictly forbidden in the deployment container)
+data/raw/
+data/processed/
+data/inference/
+
+# Jupyter Notebooks & Assets
+notebooks/
+*.ipynb
+assets/
+
+# Logs and Outputs
+logs/
+outputs/
+
+# Historical Model Artifacts
+# (We ignore all artifacts to prevent bloat, but will explicitly whitelist the production model below)
+artifacts/*
+!artifacts/prod/
+
+# System Files
+.DS_Store
