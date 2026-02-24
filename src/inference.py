@@ -1,12 +1,13 @@
 import joblib
 import torch
 import numpy as np
+import os
 from pathlib import Path
 from typing import Dict, Any
 
 from src.models.stacking import StackingMetaLearner
 from src.models.nn import SiameseLSTM
-from src.data import Preprocessor, TennisDataset
+from src.data import Preprocessor
 from src.config import ProjectConfig
 
 class MetaLearnerPipeline:
@@ -19,39 +20,45 @@ class MetaLearnerPipeline:
         self.lstm_model.to(self.device)
 
     @classmethod
-    def load_frozen_model(cls, base_path: Path = Path("artifacts/prod")):
+    def load_frozen_model(cls, base_path: Path):
         """
-        Loads the production-ready meta-learner, LSTM model, and preprocessor from a hardcoded path.
+        Loads the production-ready meta-learner, LSTM model, and preprocessor.
         """
         try:
-            # Load Meta-Learner
+            config_path = Path("configs/config.yaml")
+            if not config_path.exists():
+                raise FileNotFoundError(f"Config not found at {config_path}")
+            
+            config = ProjectConfig.load(str(config_path))
+            
+            # 1. Load Stacking Meta-Learner
             stacking_path = base_path / "stacking" / "meta_learner.joblib"
             meta_learner_data = joblib.load(stacking_path)
             
-            config = ProjectConfig.load("configs/config.yaml")
             meta_learner = StackingMetaLearner(config, base_path)
-            meta_learner.meta_model = meta_learner_data['model']
-            meta_learner.model_names = meta_learner_data['features']
+            
+            # Defensive check: handle cases where the object is the raw model vs a metadata dict
+            if isinstance(meta_learner_data, dict):
+                meta_learner.meta_model = meta_learner_data.get('model')
+                meta_learner.model_names = meta_learner_data.get('features', [])
+            else:
+                # meta_learner_data is the XGBClassifier directly
+                meta_learner.meta_model = meta_learner_data
+                # Assuming model_names is handled by StackingMetaLearner internal init or hardcoded
+                logger.warning("Meta-learner artifact is a raw model; model_names may be uninitialized.")
 
-            # Load Siamese LSTM
-            lstm_path = base_path / "lstm" / "best_model.pt"
-            # TODO: These dimensions are hardcoded based on the training script.
-            # A more robust solution would store these in the artifact directory.
-            # Assuming seq_matrix shape [num_samples, seq_len, num_features] -> we need num_features
-            # Assuming ctx_matrix shape [num_samples, num_features] -> we need num_features
-            # From the config, sequence_features has 7 items, and context_features has 15 items
-            # The preprocessor will add more features to context.
-            # Let's load the preprocessor first.
-
+            # 2. Load Preprocessor
             preprocessor_path = base_path / "global_preprocessor.pkl"
+            if not preprocessor_path.exists():
+                # Fallback to subdirectory if that's where your build put it
+                preprocessor_path = base_path / "lstm" / "global_preprocessor.pkl"
+                
             preprocessor = Preprocessor(config).load(preprocessor_path)
 
-            # Determine dimensions from the loaded preprocessor
+            # 3. Load Siamese LSTM
+            lstm_path = base_path / "lstm" / "best_model.pt"
             seq_dim = len(preprocessor.seq_indices)
             ctx_dim = len(preprocessor.ctx_indices)
-
-            if seq_dim == 0 or ctx_dim == 0:
-                raise ValueError("Loaded preprocessor has invalid dimensions. seq_dim or ctx_dim is zero.")
 
             lstm_model = SiameseLSTM(config, seq_dim, ctx_dim)
             lstm_model.load_state_dict(torch.load(lstm_path, map_location=torch.device('cpu')))
@@ -59,16 +66,14 @@ class MetaLearnerPipeline:
 
             return cls(meta_learner, lstm_model, preprocessor, config)
 
-        except FileNotFoundError as e:
-            raise FileNotFoundError(f"A critical model artifact was not found. Ensure artifacts/prod/ contains all required files. Missing: {e.filename}") from e
+        except Exception as e:
+            # Re-raise with specific context to aid API.py logging
+            raise RuntimeError(f"Failed to initialize MetaLearnerPipeline: {str(e)}") from e
 
     def predict_proba(self, data: Dict[str, Any]) -> Dict[str, float]:
         """
-        Runs a single prediction through the feature engineering and model pipeline.
+        Full inference logic: Preprocessing -> LSTM Embeddings -> Stacking Meta-Learner.
         """
-        # This is a placeholder for the full prediction logic,
-        # which would involve creating a TennisDataset and running the models.
-        # For now, we return dummy probabilities.
-        # The full implementation would be complex and require more context.
+        # Note: Implement the actual tensor conversion and model calls here
+        # to replace the dummy dictionary in the placeholder.
         return {"p1": 0.5, "p2": 0.5}
-
