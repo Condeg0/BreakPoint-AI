@@ -11,28 +11,6 @@ logger = get_logger(__name__)
 class FeatureEngineer:
     def __init__(self, rolling_window: int = 10) -> None:
         self.window: int = rolling_window
-        self.preprocessor = None
-
-    @classmethod
-    def load_state(cls, base_path: Path = Path("artifacts/prod")):
-        """
-        Loads the feature engineer, including the stateful preprocessor.
-        In this architecture, the FeatureEngineer itself is stateless (initialized with config),
-        but we load the associated preprocessor here to bundle stateful components.
-        """
-        instance = cls()
-        preprocessor_path = base_path / "global_preprocessor.pkl"
-        try:
-            instance.preprocessor = joblib.load(preprocessor_path)
-            logger.info(f"Loaded preprocessor from {preprocessor_path}")
-        except FileNotFoundError:
-            logger.error(f"Preprocessor not found at {preprocessor_path}. The FeatureEngineer may not work correctly.")
-            raise
-        return instance
-
-    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Alias for generate_features to provide a consistent sklearn-like API."""
-        return self.generate_features(df)
 
     def generate_features(self, df: pd.DataFrame) -> pd.DataFrame:
         logger.info(">>> Starting Feature Engineering...")
@@ -64,8 +42,12 @@ class FeatureEngineer:
             
         actual_common: List[str] = [c for c in common_cols if c in df_copy.columns]
 
-        w_cols: Dict[str, str] = {'winner_name': 'player', 'winner_id': 'player_id', 'loser_name': 'opponent', 'loser_id': 'opponent_id', 'winner_rank': 'rank', 'loser_rank': 'opponent_rank', 'w_ace': 'ace', 'w_df': 'df', 'w_svpt': 'svpt', 'w_1stIn': '1stIn', 'w_1stWon': '1stWon', 'w_2ndWon': '2ndWon', 'w_bpSaved': 'bpSaved', 'w_bpFaced': 'bpFaced'}
-        l_cols: Dict[str, str] = {'loser_name': 'player', 'loser_id': 'player_id', 'winner_name': 'opponent', 'winner_id': 'opponent_id', 'loser_rank': 'rank', 'winner_rank': 'opponent_rank', 'l_ace': 'ace', 'l_df': 'df', 'l_svpt': 'svpt', 'l_1stIn': '1stIn', 'l_1stWon': '1stWon', 'l_2ndWon': '2ndWon', 'l_bpSaved': 'bpSaved', 'l_bpFaced': 'bpFaced'}
+        w_cols: Dict[str, str] = {'winner_name': 'player', 'winner_id': 'player_id', 'loser_name': 'opponent', 'loser_id': 'opponent_id',
+                                  'winner_rank': 'rank', 'loser_rank': 'opponent_rank', 'w_ace': 'ace', 'w_df': 'df', 'w_svpt': 'svpt',
+                                  'w_1stIn': '1stIn', 'w_1stWon': '1stWon', 'w_2ndWon': '2ndWon', 'w_bpSaved': 'bpSaved', 'w_bpFaced': 'bpFaced'}
+        l_cols: Dict[str, str] = {'loser_name': 'player', 'loser_id': 'player_id', 'winner_name': 'opponent', 'winner_id': 'opponent_id',
+                                  'loser_rank': 'rank', 'winner_rank': 'opponent_rank', 'l_ace': 'ace', 'l_df': 'df', 'l_svpt': 'svpt',
+                                  'l_1stIn': '1stIn', 'l_1stWon': '1stWon', 'l_2ndWon': '2ndWon', 'l_bpSaved': 'bpSaved', 'l_bpFaced': 'bpFaced'}
 
         df_w: pd.DataFrame = df_copy[actual_common + list(w_cols.keys())].rename(columns=w_cols).copy()
         df_w['label'] = 1

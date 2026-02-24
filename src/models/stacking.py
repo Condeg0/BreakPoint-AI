@@ -2,7 +2,7 @@ import joblib
 import numpy as np
 from pathlib import Path
 from sklearn.linear_model import LogisticRegression
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Self
 
 from src.config import ProjectConfig
 from src.logger import get_logger
@@ -51,7 +51,7 @@ class StackingMetaLearner:
         joblib.dump(save_dict, self.stacking_dir / "meta_learner.joblib")
         logger.info(f"Stacking Meta-Learner saved to {self.stacking_dir}")
 
-    def load(self) -> "StackingMetaLearner":
+    def load(self) -> Self:
         load_dict: Dict[str, Any] = joblib.load(self.stacking_dir / "meta_learner.joblib")
         self.meta_model = load_dict['model']
         self.model_names = load_dict['features']

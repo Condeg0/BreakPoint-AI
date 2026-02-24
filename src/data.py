@@ -76,7 +76,7 @@ class Preprocessor:
     def save(self, path: Path) -> None:
         joblib.dump(self, path)
 
-    def load(self, path: Path) -> Preprocessor:
+    def load(self, path: Path) -> Self:
         loaded: Preprocessor = joblib.load(path)
         self.pipeline = loaded.pipeline
         self.feature_names = loaded.feature_names

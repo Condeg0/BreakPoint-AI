@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, List, Dict, Any, Union, Self
 
 class DataPaths(BaseModel):
     raw_dir: str
@@ -78,7 +78,7 @@ class ProjectConfig(BaseModel):
     models: ModelsConfig
 
     @classmethod
-    def load(cls, path: Union[Path, str]) -> "ProjectConfig":
+    def load(cls, path: Union[Path, str]) -> Self:
         config_path = Path(path)
         if not config_path.exists():
             raise FileNotFoundError(f"Configuration file not found at {config_path}")
