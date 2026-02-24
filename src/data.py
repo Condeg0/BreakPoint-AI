@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from typing import Tuple, List, Dict, Any, Set, Union, Optional
+from typing import Tuple, List, Dict, Any, Set, Union, Optional, Self
 
 from src.logger import get_logger
 from src.config import ProjectConfig
@@ -24,7 +24,7 @@ class Preprocessor:
         self.ctx_indices: List[int] = []
         self.seq_indices: List[int] = []
 
-    def fit(self, df: pd.DataFrame) -> Preprocessor:
+    def fit(self, df: pd.DataFrame) -> Self:
         ctx_whitelist: Set[str] = set(self.config.data.features.context)
         available: Set[str] = set(df.columns)
         valid_ctx: List[str] = list(ctx_whitelist.intersection(available))
