@@ -1,0 +1,27 @@
+2026-02-24 13:13:14 | INFO     | src.data | Merging 35 raw CSV files...
+2026-02-24 13:13:15 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-02-24 13:13:15 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-02-24 13:14:51 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 75)
+2026-02-24 13:14:52 | INFO     | src.training | 
+==================================================
+2026-02-24 13:14:52 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: XGBOOST
+2026-02-24 13:14:52 | INFO     | src.training | ==================================================
+2026-02-24 13:14:52 | INFO     | src.training | Training XGBoostModel...
+2026-02-24 13:14:52 | INFO     | src.training | [XGBoost] Train AUC: 0.7260 | Val AUC: 0.7008 | Best Iteration: 99
+2026-02-24 13:14:52 | INFO     | src.training | Model saved to artifacts/20260224_131451/xgboost/model.joblib
+2026-02-24 13:14:54 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR XGBOOST...
+2026-02-24 13:14:54 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7076
+Accuracy:    0.6423
+Precision:   0.6419
+Recall:      0.6437
+F1 Score:    0.6428
+========================================
+        
+2026-02-24 13:14:54 | INFO     | src.evaluation |    - Starting SHAP calculation for xgboost...
+2026-02-24 13:14:55 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-02-24 13:14:55 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260224_131451/xgboost

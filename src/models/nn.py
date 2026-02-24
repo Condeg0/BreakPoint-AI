@@ -1,15 +1,16 @@
 import torch
 import torch.nn as nn
+from src.config import ProjectConfig, LSTMArch
 
 class SiameseLSTM(nn.Module):
-    def __init__(self, config, input_dim: int, context_dim: int):
+    def __init__(self, config: ProjectConfig, input_dim: int, context_dim: int) -> None:
         super(SiameseLSTM, self).__init__()
-        self.config = config
+        self.config: ProjectConfig = config
         
         # Route specifically to the LSTM architecture configs
-        lstm_cfg = config.models.lstm.architecture
+        lstm_cfg: LSTMArch = config.models.lstm.architecture
 
-        self.lstm = nn.LSTM(
+        self.lstm: nn.LSTM = nn.LSTM(
             input_size=input_dim,
             hidden_size=lstm_cfg.hidden_size,
             num_layers=lstm_cfg.num_layers,
@@ -17,9 +18,9 @@ class SiameseLSTM(nn.Module):
             dropout=lstm_cfg.dropout if lstm_cfg.num_layers > 1 else 0
         )
 
-        fusion_input_dim = (lstm_cfg.hidden_size * 2) + context_dim
+        fusion_input_dim: int = (lstm_cfg.hidden_size * 2) + context_dim
 
-        self.fusion = nn.Sequential(
+        self.fusion: nn.Sequential = nn.Sequential(
             nn.Linear(fusion_input_dim, 64),
             nn.ReLU(),
             nn.Dropout(lstm_cfg.dropout),
@@ -29,12 +30,13 @@ class SiameseLSTM(nn.Module):
             nn.Linear(32, 1) # Output logit
         )
 
-    def forward(self, seq_a, seq_b, context):
+    def forward(self, seq_a: torch.Tensor, seq_b: torch.Tensor, context: torch.Tensor) -> torch.Tensor:
+        # Note: h_n shape is (num_layers, batch, hidden_size)
         _, (h_n_a, _) = self.lstm(seq_a)
-        emb_a = h_n_a[-1]
+        emb_a: torch.Tensor = h_n_a[-1]  # Get last layer's hidden state
 
         _, (h_n_b, _) = self.lstm(seq_b)
-        emb_b = h_n_b[-1]
+        emb_b: torch.Tensor = h_n_b[-1]
 
-        combined = torch.cat([emb_a, emb_b, context], dim=1)
+        combined: torch.Tensor = torch.cat([emb_a, emb_b, context], dim=1)
         return self.fusion(combined)

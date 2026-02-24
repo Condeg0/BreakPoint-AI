@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List, Dict, Any, Union
 
 class DataPaths(BaseModel):
     raw_dir: str
@@ -13,9 +13,9 @@ class TemporalSplits(BaseModel):
     test_start: str
 
 class FeatureSets(BaseModel):
-    context: list[str]
-    sequence: list[str]
-    categorical: list[str]
+    context: List[str]
+    sequence: List[str]
+    categorical: List[str]
     target: str
 
 class DataConfig(BaseModel):
@@ -24,7 +24,7 @@ class DataConfig(BaseModel):
     features: FeatureSets
 
 class PipelineConfig(BaseModel):
-    models_to_train: list[str]
+    models_to_train: List[str]
     use_stacking: bool
     run_evaluation: bool
     stacking_base_artifact_dir: Optional[str] = None
@@ -49,16 +49,16 @@ class LSTMConfig(BaseModel):
     training: LSTMTrain
 
 class XGBoostConfig(BaseModel):
-    hyperparameters: dict
-    training: dict
+    hyperparameters: Dict[str, Any]
+    training: Dict[str, Any]
 
 class RandomForestConfig(BaseModel):
-    hyperparameters: dict
-    training: dict
+    hyperparameters: Dict[str, Any]
+    training: Dict[str, Any]
 
 class LogRegConfig(BaseModel):
-    hyperparameters: dict
-    training: dict
+    hyperparameters: Dict[str, Any]
+    training: Dict[str, Any]
 
 class StackingConfig(BaseModel):
     meta_learner: str
@@ -72,18 +72,18 @@ class ModelsConfig(BaseModel):
     stacking: StackingConfig
 
 class ProjectConfig(BaseModel):
-    project: dict
+    project: Dict[str, Any]
     data: DataConfig
     pipeline: PipelineConfig
     models: ModelsConfig
 
     @classmethod
-    def load(cls, path: Path | str) -> "ProjectConfig":
+    def load(cls, path: Union[Path, str]) -> "ProjectConfig":
         config_path = Path(path)
         if not config_path.exists():
             raise FileNotFoundError(f"Configuration file not found at {config_path}")
             
         with open(config_path, "r") as f:
-            cfg_dict = yaml.safe_load(f)
+            cfg_dict: Dict[str, Any] = yaml.safe_load(f)
             
         return cls(**cfg_dict)

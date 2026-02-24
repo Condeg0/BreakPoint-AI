@@ -10,7 +10,7 @@ data:
     train_cutoff: "2022-12-31"
     test_start: "2024-01-01"
   features:
-    context: 
+    context:
       - "rank_diff"
       - "rank"
       - "opponent_rank"
@@ -19,7 +19,7 @@ data:
       - "win_pct_roll_diff"
       - "h2h_win_rate"
       - "days_since"
-    sequence: 
+    sequence:
       - "ace"
       - "df"
       - "svpt"
@@ -29,12 +29,12 @@ data:
       - "rank"
       - "winner_rank"
       - "loser_rank"
-    categorical: 
+    categorical:
       - "surface"
     target: "label"
 
 pipeline:
-  models_to_train: ["stacking"]  # "lstm", "xgboost", "random_forest", "logistic_regression", "stacking" 
+  models_to_train: ["xgboost"]  # "lstm", "xgboost", "random_forest", "logistic_regression", "stacking"
   stacking_base_artifact_dir: 'artifacts/20260219_174038'
   # To use stacking models need to be trained at the same time, thus they remain in the same directory
   use_stacking: true  # boolean
@@ -55,7 +55,7 @@ models:
       epochs: 30
       learning_rate: 0.0002
       tuning_enabled: false
-  
+
   xgboost:
     hyperparameters:
       n_estimators: 200
