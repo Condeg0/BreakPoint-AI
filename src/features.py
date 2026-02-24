@@ -11,6 +11,28 @@ logger = get_logger(__name__)
 class FeatureEngineer:
     def __init__(self, rolling_window: int = 10) -> None:
         self.window: int = rolling_window
+        self.preprocessor = None
+
+    @classmethod
+    def load_state(cls, base_path: Path = Path("artifacts/prod")):
+        """
+        Loads the feature engineer, including the stateful preprocessor.
+        In this architecture, the FeatureEngineer itself is stateless (initialized with config),
+        but we load the associated preprocessor here to bundle stateful components.
+        """
+        instance = cls()
+        preprocessor_path = base_path / "global_preprocessor.pkl"
+        try:
+            instance.preprocessor = joblib.load(preprocessor_path)
+            logger.info(f"Loaded preprocessor from {preprocessor_path}")
+        except FileNotFoundError:
+            logger.error(f"Preprocessor not found at {preprocessor_path}. The FeatureEngineer may not work correctly.")
+            raise
+        return instance
+
+    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Alias for generate_features to provide a consistent sklearn-like API."""
+        return self.generate_features(df)
 
     def generate_features(self, df: pd.DataFrame) -> pd.DataFrame:
         logger.info(">>> Starting Feature Engineering...")

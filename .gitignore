@@ -9,8 +9,14 @@ venv/
 .DS_Store
 
 # --- Project Specific ---
-# NEVER commit data or model artifacts
+# NEVER commit raw data, logs, or research notebooks
 data/
-artifacts/
 notebooks/
 story.txt
+/logs
+
+# --- Artifact Isolation (CRITICAL FOR GITOPS) ---
+# Ignore all historical research checkpoints to prevent repository bloat
+artifacts/*
+# Explicitly whitelist the production models required by the Docker container
+!artifacts/prod/
