@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Self
 
 from src.logger import get_logger
 
@@ -11,6 +11,22 @@ logger = get_logger(__name__)
 class FeatureEngineer:
     def __init__(self, rolling_window: int = 10) -> None:
         self.window: int = rolling_window
+        self.preprocessor: Any = None
+
+    @classmethod
+    def load_state(cls, base_path: Path = Path("artifacts/prod")) -> Self:
+        """
+        Loads the feature engineer and the production stateful preprocessor.
+        """
+        instance = cls()
+        preprocessor_path = base_path / "global_preprocessor.pkl"
+        try:
+            instance.preprocessor = joblib.load(preprocessor_path)
+            logger.info(f"Loaded preprocessor from {preprocessor_path}")
+        except FileNotFoundError as e:
+            logger.error(f"Preprocessor not found at {preprocessor_path}.")
+            raise FileNotFoundError("Missing global_preprocessor.pkl in artifacts/prod/") from e
+        return instance
 
     def generate_features(self, df: pd.DataFrame) -> pd.DataFrame:
         logger.info(">>> Starting Feature Engineering...")
