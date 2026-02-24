@@ -35,7 +35,7 @@ COPY configs/ /app/configs/
 COPY src/ /app/src/
 
 # Copy only the isolated production models (whitelisted in .dockerignore)
-COPY artifacts/prod/ /app/artifacts/prod/
+COPY model_prod/ /app/artifacts/prod/
 
 RUN chown -R mlopsuser:mlopsgroup /app
 USER mlopsuser

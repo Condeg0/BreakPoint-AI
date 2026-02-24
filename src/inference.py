@@ -28,7 +28,7 @@ class MetaLearnerPipeline:
             stacking_path = base_path / "stacking" / "meta_learner.joblib"
             meta_learner_data = joblib.load(stacking_path)
             
-            config = ProjectConfig.load() # Load default config
+            config = ProjectConfig.load("configs/config.yaml")
             meta_learner = StackingMetaLearner(config, base_path)
             meta_learner.meta_model = meta_learner_data['model']
             meta_learner.model_names = meta_learner_data['features']

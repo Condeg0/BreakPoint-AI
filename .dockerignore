@@ -25,10 +25,10 @@ assets/
 logs/
 outputs/
 
-# Historical Model Artifacts
-# (We ignore all artifacts to prevent bloat, but will explicitly whitelist the production model below)
+# Historical Model Artifacts 
 artifacts/*
-!artifacts/prod/
+!artifacts/prod
+!artifacts/prod/**
 
 # System Files
 .DS_Store
