@@ -16,7 +16,8 @@ from src.models.baselines import RandomForestBaseline, LogisticBaseline
 from src.logger import get_logger
 
 
-logger = get_logger(__name__)
+
+logger: logging.Logger = get_logger(__name__, artifact_dir="outputs/run_2026_02_20")
 
 def load_recent_history(raw_dir: Path, years_back: int = 2) -> pd.DataFrame:
     """Loads only the most recent historical data required for rolling windows."""
@@ -34,6 +35,9 @@ def load_recent_history(raw_dir: Path, years_back: int = 2) -> pd.DataFrame:
     return df
 
 def main() -> None:
+
+    global logger
+
     parser: argparse.ArgumentParser = argparse.ArgumentParser(description="BreakPoint AI: Inference Engine")
     parser.add_argument("--config", type=str, default="configs/config.yaml", help="Path to config file")
     parser.add_argument("--model", type=str, default="lstm", help="Specific model to use for inference")
@@ -46,7 +50,6 @@ def main() -> None:
         sys.exit(1)
 
     artifact_dir: Path = Path(config.pipeline.inference_artifact_dir)
-    global logger
     logger = get_logger(__name__, artifact_dir=artifact_dir)
 
     input_file: Path = Path(config.pipeline.inference_input_file)

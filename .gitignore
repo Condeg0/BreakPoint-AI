@@ -4,19 +4,27 @@ __pycache__/
 *$py.class
 .env
 venv/
+.venv
 .vscode/
 .idea/
 .DS_Store
+src/__pycache__
 
 # --- Project Specific ---
 # NEVER commit raw data, logs, or research notebooks
 data/
 notebooks/
+BreakPointAI-DOCS.md
 story.txt
-/logs
 
 # --- Artifact Isolation (CRITICAL FOR GITOPS) ---
 # Ignore all historical research checkpoints to prevent repository bloat
 artifacts/*
+logs
+model_prod/
+outputs/
+
+
+
 # Explicitly whitelist the production models required by the Docker container
 !artifacts/prod/

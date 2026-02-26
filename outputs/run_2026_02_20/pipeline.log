@@ -1,18 +1,144 @@
-2026-02-24 13:13:14 | INFO     | __main__ | Loading config from configs/config.yaml...
-2026-02-24 13:13:14 | INFO     | __main__ | 
->>> Phase 1: Data Ingestion
-2026-02-24 13:13:15 | INFO     | __main__ | 
->>> Phase 2: Feature Engineering
-2026-02-24 13:14:51 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
-2026-02-24 13:14:51 | INFO     | __main__ | 
->>> Phase 3: Preprocessing Setup
-2026-02-24 13:14:52 | INFO     | __main__ | 
->>> Phase 4: Model Execution
-2026-02-24 13:14:52 | INFO     | __main__ | 
---- Initiating Base Model Run: xgboost ---
-2026-02-24 13:14:53 | INFO     | __main__ | 
->>> Phase 5: Evaluation & Artifact Logging
-2026-02-24 13:14:54 | INFO     | __main__ | 
---- Evaluating xgboost on Test Set ---
-2026-02-24 13:14:55 | INFO     | __main__ | 
->>> Global Execution Complete. All artifacts saved to: artifacts/20260224_131451
+2026-02-26 14:14:31 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:14:31 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:14:31 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:14:35 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:14:35 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (lstm)
+2026-02-26 14:14:35 | ERROR    | __main__ | Model artifacts not found at model_prod/lstm/lstm
+2026-02-26 14:17:05 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:17:05 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:17:05 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:17:09 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:17:09 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (lstm)
+2026-02-26 14:17:09 | INFO     | __main__ | 
+>>> Phase 4: Prediction Execution
+2026-02-26 14:18:16 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:18:16 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:18:16 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:18:20 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:18:20 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (lstm)
+2026-02-26 14:18:20 | ERROR    | __main__ | Model artifacts not found at artifacts/20260224_131451/lstm
+2026-02-26 14:22:27 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:22:27 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:22:27 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:22:32 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:22:32 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (lstm)
+2026-02-26 14:22:32 | ERROR    | __main__ | Model artifacts not found at artifacts/20260224_131451/lstm
+2026-02-26 14:23:11 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:23:11 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:23:11 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:23:15 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:23:15 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (lstm)
+2026-02-26 14:23:15 | ERROR    | __main__ | Model artifacts not found at artifacts/20260224_131451/lstm
+2026-02-26 14:23:43 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:23:43 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:23:43 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:23:47 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:23:47 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (lstm)
+2026-02-26 14:23:47 | ERROR    | __main__ | Model artifacts not found at artifacts/20260224_131451/lstm
+2026-02-26 14:25:43 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:25:43 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:25:43 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:25:48 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:25:48 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (xgboost)
+2026-02-26 14:25:48 | INFO     | __main__ | 
+>>> Phase 4: Prediction Execution
+2026-02-26 14:25:48 | INFO     | __main__ | 
+>>> Inference Complete. Forecasts saved to: data/inference/predictions.csv
+2026-02-26 14:25:48 | INFO     | __main__ | Inference results head:
+  tourney_date             player           opponent surface  prob_player_wins_xgboost
+0   2024-01-01        Casper Ruud  Tallon Griekspoor    Hard                  0.527156
+1   2024-01-01  Tallon Griekspoor        Casper Ruud    Hard                  0.436951
+2   2024-01-01        Casper Ruud        Borna Coric    Hard                  0.658167
+3   2024-01-01        Borna Coric        Casper Ruud    Hard                  0.298225
+4   2024-01-01        Borna Coric  Tallon Griekspoor    Hard                  0.385598
+2026-02-26 14:28:58 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:28:58 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:28:58 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:29:02 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:29:02 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (xgboost)
+2026-02-26 14:30:09 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:30:09 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:30:09 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:30:13 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:30:13 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (xgboost)
+2026-02-26 14:30:38 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:30:38 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:30:38 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:30:42 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:30:42 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (xgboost)
+2026-02-26 14:32:55 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:32:55 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:32:55 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:32:59 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:32:59 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (xgboost)
+2026-02-26 14:33:11 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:33:11 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:33:11 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:33:15 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:33:15 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (xgboost)
+2026-02-26 14:33:15 | INFO     | __main__ | 
+>>> Phase 4: Prediction Execution
+2026-02-26 14:33:15 | INFO     | __main__ | 
+>>> Inference Complete. Forecasts saved to: data/inference/predictions.csv
+2026-02-26 14:33:15 | INFO     | __main__ | Inference results head:
+  tourney_date             player           opponent surface  prob_player_wins_xgboost
+0   2024-01-01        Casper Ruud  Tallon Griekspoor    Hard                  0.359041
+1   2024-01-01  Tallon Griekspoor        Casper Ruud    Hard                  0.436487
+2   2024-01-01        Casper Ruud        Borna Coric    Hard                  0.350870
+3   2024-01-01        Borna Coric        Casper Ruud    Hard                  0.443045
+4   2024-01-01        Borna Coric  Tallon Griekspoor    Hard                  0.572854
+2026-02-26 14:35:15 | INFO     | __main__ | 
+>>> Phase 1: Context Stitching
+2026-02-26 14:35:15 | INFO     | __main__ | Loading historical context from: ['atp_matches_2023.csv', 'atp_matches_2024.csv']
+2026-02-26 14:35:15 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering (Stateful)
+2026-02-26 14:35:20 | INFO     | __main__ | Processed 290 upcoming matches for inference.
+2026-02-26 14:35:20 | INFO     | __main__ | 
+>>> Phase 3: Artifact Loading (lstm)
+2026-02-26 14:35:20 | INFO     | __main__ | 
+>>> Phase 4: Prediction Execution
+2026-02-26 14:35:20 | INFO     | __main__ | 
+>>> Inference Complete. Forecasts saved to: data/inference/predictions.csv
+2026-02-26 14:35:20 | INFO     | __main__ | Inference results head:
+  tourney_date             player           opponent surface  prob_player_wins_lstm
+0   2024-01-01        Casper Ruud  Tallon Griekspoor    Hard               0.577306
+1   2024-01-01  Tallon Griekspoor        Casper Ruud    Hard               0.550521
+2   2024-01-01        Casper Ruud        Borna Coric    Hard               0.556615
+3   2024-01-01        Borna Coric        Casper Ruud    Hard               0.569328
+4   2024-01-01        Borna Coric  Tallon Griekspoor    Hard               0.529460

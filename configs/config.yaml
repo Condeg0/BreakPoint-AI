@@ -39,7 +39,8 @@ pipeline:
   # To use stacking models need to be trained at the same time, thus they remain in the same directory
   use_stacking: true  # boolean
   run_evaluation: true # boolean
-  inference_artifact_dir: "artifacts/20260219_164830" # Model to run inference
+  # --- Inference Model Location ---
+  inference_artifact_dir: "model_prod" # Model to run inference
   inference_input_file: "data/inference/upcoming_matches.csv"
   inference_output_file: "data/inference/predictions.csv"
 
