@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: breakpoint-api
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    # We leave the volume mount temporarily until the Feature Store is fully seeded
+    volumes:
+      - ./data:/app/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: breakpoint-redis
+    ports:
+      - "6379:6379"

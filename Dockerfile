@@ -30,12 +30,13 @@ COPY --from=builder /build/wheels /wheels
 COPY --from=builder /build/requirements.txt .
 RUN pip install --no-cache /wheels/* && rm -rf /wheels
 
-# Copy strictly required operational code and configuration
+# Copy operational code and configuration
 COPY configs/ /app/configs/
 COPY src/ /app/src/
-
-# Copy only the isolated production models (whitelisted in .dockerignore)
 COPY model_prod/ /app/artifacts/prod/
+
+# NEW: Embed the historical ledger for batch context
+COPY data/raw/ /app/data/raw/
 
 RUN chown -R mlopsuser:mlopsgroup /app
 USER mlopsuser
