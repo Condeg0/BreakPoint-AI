@@ -9,6 +9,10 @@ from src.models.stacking import StackingMetaLearner
 from src.models.nn import SiameseLSTM
 from src.data import Preprocessor
 from src.config import ProjectConfig
+from src.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 class MetaLearnerPipeline:
     def __init__(self, meta_learner: StackingMetaLearner, lstm_model: SiameseLSTM, preprocessor: Preprocessor, config: ProjectConfig):

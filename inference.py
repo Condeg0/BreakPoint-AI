@@ -15,7 +15,8 @@ from src.models.nn import SiameseLSTM
 from src.models.baselines import RandomForestBaseline, LogisticBaseline
 from src.logger import get_logger
 
-logger: logging.Logger = get_logger(__name__)
+
+logger = get_logger(__name__)
 
 def load_recent_history(raw_dir: Path, years_back: int = 2) -> pd.DataFrame:
     """Loads only the most recent historical data required for rolling windows."""
