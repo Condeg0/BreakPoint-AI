@@ -43,4 +43,4 @@ USER mlopsuser
 
 EXPOSE 8080
 
-CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "2", "--proxy-headers"]
+CMD uvicorn src.api:app --host 0.0.0.0 --port ${PORT:-8080}

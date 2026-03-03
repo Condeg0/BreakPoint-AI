@@ -6,6 +6,8 @@ from pathlib import Path
 from typing import List
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from pydantic import BaseModel
+import psutil
+
 
 from src.features import FeatureEngineer
 from src.inference import MetaLearnerPipeline
@@ -33,6 +35,22 @@ class BatchPredictionResponseItem(BaseModel):
 
 class BatchPredictionResponse(BaseModel):
     predictions: List[BatchPredictionResponseItem]
+
+class HealthResponse(BaseModel):
+    status: str
+    memory_usage: str
+
+@app.get("/health", response_model=HealthResponse)
+def health_check():
+    """
+    Health check endpoint to report service status and memory usage.
+    Crucial for monitoring in memory-constrained environments like Render's free tier.
+    """
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+    memory_mb = memory_info.rss / (1024 * 1024)  # RSS in MB
+    return {"status": "ok", "memory_usage": f"{memory_mb:.2f} MB"}
+
 
 def load_recent_history(raw_dir: Path, years_back: int = 2) -> pd.DataFrame:
     files = sorted(list(raw_dir.glob("atp_matches_*.csv")))
