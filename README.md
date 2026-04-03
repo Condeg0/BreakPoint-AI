@@ -2,8 +2,6 @@
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.0-orange)
-![FastAPI](https://img.shields.io/badge/FastAPI-API-teal)
-![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
 ![Optuna](https://img.shields.io/badge/Optuna-Optimization-green)
 ![License](https://img.shields.io/badge/License-MIT-grey)
 
@@ -13,7 +11,7 @@
 
 * **Engineered a Siamese LSTM Pipeline:** Processed raw sequence histories (aces, faults, serve percentages) through twin LSTMs to generate latent "momentum embeddings," matching optimized tabular models without requiring manual feature smoothing.
 * **Resolved Temporal Leakage:** Implemented a stateful inference API using strict `date < current_date` filtration to process rolling 10-match windows dynamically, ensuring the model never sees future stats in the history buffer.
-* **Optimized Inference Delivery:** Containerized the model weights and FastAPI endpoints via Docker, supporting batch `.csv` inference for high-throughput prediction generation.
+* **Batch CLI Inference:** Loads frozen model weights locally and runs end-to-end predictions from a `.csv` of upcoming matches, outputting calibrated win probabilities with confidence spreads.
 * **Context Fusion:** Combines momentum embeddings with static match context (Rank Diff, Surface, Head-to-Head) in a dense fusion layer.
 * **Institutional Evaluation:** Focuses on calibration (Reliability Diagrams) and SHAP values rather than just raw accuracy, mirroring financial risk modeling standards.
 
@@ -38,7 +36,6 @@ tennis-forecast/
 ├── docs/
 │   └── system_architecture.md # Comprehensive Developer Manual
 ├── src/
-│   ├── api.py             # FastAPI application layer (Batch CSV endpoint)
 │   ├── data.py            # Dual-Pipeline Dataset (Context vs. Sequence)
 │   ├── features.py        # Feature Engineering (Rolling, Lag, H2H)
 │   ├── inference.py       # MetaLearnerPipeline (PyTorch tensor logic & inference)
@@ -46,9 +43,8 @@ tennis-forecast/
 │   ├── training.py        # Training Loop with Early Stopping
 │   ├── tuning.py          # Optuna Hyperparameter Search
 │   └── evaluation.py      # SHAP, Calibration, and Metrics generation
-├── Dockerfile             # Container definition for the API
-├── cli_batch_predict.py   # CLI Entrypoint for batch inference
-└── main.py                # CLI Entrypoint for training
+├── cli_batch_predict.py   # CLI entrypoint for batch inference
+└── main.py                # CLI entrypoint for training
 
 ```
 
@@ -90,34 +86,16 @@ pip install -r requirements.txt
 
 ### 2. CLI Batch Prediction
 
-Use the inference CLI tool to run predictions on a local dataset using the frozen model weights.
+Add upcoming matches to `data/inference/upcoming_matches.csv`, then run:
 
 ```bash
 python cli_batch_predict.py --config configs/config.yaml --model stacking
 
 ```
 
-### 3. Dockerized API Usage
+Predictions are written to `data/inference/predictions.csv` with calibrated win probabilities and confidence spreads for each match.
 
-Launch the FastAPI server inside an isolated container with pre-loaded weights.
-
-```bash
-docker build -t breakpoint-api .
-docker run -p 8000:8000 breakpoint-api
-
-```
-
-Send a batch inference request:
-
-```bash
-curl -X POST "http://localhost:8000/predict/batch" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@data/raw/upcoming_matches.csv"
-
-```
-
-### 4. Run Training Pipelines
+### 3. Run Training Pipelines
 
 Train a Random Forest using "Rolling Average" features to establish a performance floor.
 
