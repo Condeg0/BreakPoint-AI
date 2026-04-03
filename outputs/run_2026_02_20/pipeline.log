@@ -142,3 +142,169 @@
 2   2024-01-01        Casper Ruud        Borna Coric    Hard               0.556615
 3   2024-01-01        Borna Coric        Casper Ruud    Hard               0.569328
 4   2024-01-01        Borna Coric  Tallon Griekspoor    Hard               0.529460
+2026-04-03 14:12:03 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 14:12:03 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 14:12:04 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 14:13:40 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 14:13:40 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 14:13:42 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 14:13:42 | INFO     | __main__ | 
+--- Initiating Base Model Run: xgboost ---
+2026-04-03 14:13:43 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 14:13:44 | INFO     | __main__ | 
+--- Evaluating xgboost on Test Set ---
+2026-04-03 14:13:45 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_141340
+2026-04-03 14:14:31 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 14:14:31 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 14:14:31 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 14:16:11 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 14:16:11 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 14:16:13 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 14:16:13 | INFO     | __main__ | 
+--- Initiating Base Model Run: xgboost ---
+2026-04-03 14:16:14 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 14:16:14 | INFO     | __main__ | 
+--- Evaluating xgboost on Test Set ---
+2026-04-03 14:16:15 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_141611
+2026-04-03 14:16:29 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 14:16:29 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 14:16:30 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 14:18:09 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 14:18:09 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 14:18:10 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 14:18:10 | INFO     | __main__ | 
+--- Initiating Base Model Run: xgboost ---
+2026-04-03 14:18:12 | INFO     | __main__ | 
+--- Initiating Base Model Run: random_forest ---
+2026-04-03 14:18:24 | INFO     | __main__ | 
+--- Initiating Base Model Run: logistic_regression ---
+2026-04-03 14:18:25 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 14:18:26 | INFO     | __main__ | 
+--- Evaluating xgboost on Test Set ---
+2026-04-03 14:18:27 | INFO     | __main__ | 
+--- Evaluating random_forest on Test Set ---
+2026-04-03 14:18:28 | INFO     | __main__ | 
+--- Evaluating logistic_regression on Test Set ---
+2026-04-03 14:18:29 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_141809
+2026-04-03 14:18:59 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 14:18:59 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 14:19:00 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 14:20:37 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 14:20:37 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 14:20:37 | INFO     | __main__ |     > Stacking Mode: Loading frozen preprocessor to guarantee feature parity.
+2026-04-03 14:20:38 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 14:20:38 | INFO     | __main__ | 
+==================================================
+2026-04-03 14:20:38 | INFO     | __main__ | >>>  INITIATING STACKING META-LEARNER (FROM ARTIFACTS)
+2026-04-03 14:20:38 | INFO     | __main__ | ==================================================
+2026-04-03 14:20:38 | INFO     | __main__ | Loading pre-trained base models for Meta-Feature generation: ['xgboost', 'random_forest', 'logistic_regression']
+2026-04-03 14:20:38 | INFO     | __main__ |     > Generating Validation OOF predictions for xgboost...
+2026-04-03 14:20:38 | INFO     | __main__ |     > Generating Validation OOF predictions for random_forest...
+2026-04-03 14:20:38 | INFO     | __main__ |     > Generating Validation OOF predictions for logistic_regression...
+2026-04-03 14:20:38 | INFO     | __main__ | 
+>>> Stacking Engine execution complete. Meta-learner saved to artifacts/20260403_142037/stacking
+2026-04-03 14:20:38 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 14:20:39 | INFO     | __main__ | 
+--- Evaluating stacking on Test Set ---
+2026-04-03 14:20:39 | INFO     | __main__ |     > Generating Test Set predictions for logistic_regression...
+2026-04-03 14:20:39 | INFO     | __main__ |     > Generating Test Set predictions for random_forest...
+2026-04-03 14:20:39 | INFO     | __main__ |     > Generating Test Set predictions for xgboost...
+2026-04-03 14:20:40 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_142037
+2026-04-03 14:21:22 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 14:21:22 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 14:21:22 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 14:23:01 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 14:23:01 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 14:23:01 | INFO     | __main__ |     > Stacking Mode: Loading frozen preprocessor to guarantee feature parity.
+2026-04-03 14:23:02 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 14:23:02 | INFO     | __main__ | 
+==================================================
+2026-04-03 14:23:02 | INFO     | __main__ | >>>  INITIATING STACKING META-LEARNER (FROM ARTIFACTS)
+2026-04-03 14:23:02 | INFO     | __main__ | ==================================================
+2026-04-03 14:23:02 | INFO     | __main__ | Loading pre-trained base models for Meta-Feature generation: ['xgboost', 'random_forest', 'logistic_regression']
+2026-04-03 14:23:02 | INFO     | __main__ |     > Generating Validation OOF predictions for xgboost...
+2026-04-03 14:23:02 | INFO     | __main__ |     > Generating Validation OOF predictions for random_forest...
+2026-04-03 14:23:02 | INFO     | __main__ |     > Generating Validation OOF predictions for logistic_regression...
+2026-04-03 14:23:02 | INFO     | __main__ | 
+>>> Stacking Engine execution complete. Meta-learner saved to artifacts/20260403_142301/stacking
+2026-04-03 14:23:02 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 14:23:03 | INFO     | __main__ | 
+--- Evaluating stacking on Test Set ---
+2026-04-03 14:23:03 | INFO     | __main__ |     > Generating Test Set predictions for logistic_regression...
+2026-04-03 14:23:03 | INFO     | __main__ |     > Generating Test Set predictions for random_forest...
+2026-04-03 14:23:03 | INFO     | __main__ |     > Generating Test Set predictions for xgboost...
+2026-04-03 14:23:04 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_142301
+2026-04-03 14:33:36 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 14:33:36 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 14:33:36 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 14:35:11 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 14:35:11 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 14:35:12 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 14:35:12 | INFO     | __main__ | 
+--- Initiating Base Model Run: xgboost ---
+2026-04-03 14:35:13 | INFO     | __main__ | 
+--- Initiating Base Model Run: random_forest ---
+2026-04-03 14:35:24 | INFO     | __main__ | 
+--- Initiating Base Model Run: logistic_regression ---
+2026-04-03 14:35:25 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 14:35:25 | INFO     | __main__ | 
+--- Evaluating xgboost on Test Set ---
+2026-04-03 14:35:26 | INFO     | __main__ | 
+--- Evaluating random_forest on Test Set ---
+2026-04-03 14:35:27 | INFO     | __main__ | 
+--- Evaluating logistic_regression on Test Set ---
+2026-04-03 14:35:27 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_143511
+2026-04-03 15:27:47 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 15:27:47 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 15:27:47 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 15:29:23 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 15:29:23 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 15:29:24 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 15:29:24 | INFO     | __main__ | 
+--- Initiating Base Model Run: lstm ---
+2026-04-03 15:36:42 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 15:36:42 | INFO     | __main__ | 
+--- Evaluating lstm on Test Set ---
+2026-04-03 15:39:09 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_152923

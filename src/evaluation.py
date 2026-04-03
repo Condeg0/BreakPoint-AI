@@ -154,7 +154,8 @@ F1 Score:    {metrics['f1']:.4f}
                     base_est = base_model
 
                 shap_values: Union[np.ndarray, List[np.ndarray]]
-                if model_name in ["rf", "random_forest", "xgboost"]:
+                from xgboost import XGBClassifier as _XGBClassifier
+                if model_name in ["rf", "random_forest", "xgboost"] or isinstance(base_est, _XGBClassifier):
                     explainer = shap.TreeExplainer(base_est)
                     shap_values = explainer.shap_values(X_train, check_additivity=False)
                 else:

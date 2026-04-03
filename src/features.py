@@ -35,8 +35,12 @@ class FeatureEngineer:
         df_sorted: pd.DataFrame = df_copy.sort_values(['tourney_date', 'match_num']).reset_index(drop=True)
 
         long_df: pd.DataFrame = self._create_long_format(df_sorted)
-        long_df = self._add_rolling_stats(long_df)
-        long_df = self._add_h2h_features(long_df)
+        long_df = self._add_rolling_stats(long_df)      # must be first — creates win_pct
+        long_df = self._add_surface_rolling(long_df)    # needs win_pct
+        long_df = self._add_serve_stats(long_df)        # needs bpSaved, 1stIn, svpt
+        long_df = self._add_streak_features(long_df)    # needs label
+        long_df = self._add_rank_trend(long_df)         # needs rank
+        long_df = self._add_h2h_features(long_df)       # extended with surface H2H
         long_df = self._add_days_since(long_df)
         final_df: pd.DataFrame = self._pivot_to_match_format(long_df)
         final_df = self._add_diff_features(final_df)
@@ -59,10 +63,14 @@ class FeatureEngineer:
         actual_common: List[str] = [c for c in common_cols if c in df_copy.columns]
 
         w_cols: Dict[str, str] = {'winner_name': 'player', 'winner_id': 'player_id', 'loser_name': 'opponent', 'loser_id': 'opponent_id',
-                                  'winner_rank': 'rank', 'loser_rank': 'opponent_rank', 'w_ace': 'ace', 'w_df': 'df', 'w_svpt': 'svpt',
+                                  'winner_rank': 'rank', 'loser_rank': 'opponent_rank',
+                                  'winner_rank_points': 'rank_points', 'loser_rank_points': 'opponent_rank_points',
+                                  'w_ace': 'ace', 'w_df': 'df', 'w_svpt': 'svpt',
                                   'w_1stIn': '1stIn', 'w_1stWon': '1stWon', 'w_2ndWon': '2ndWon', 'w_bpSaved': 'bpSaved', 'w_bpFaced': 'bpFaced'}
         l_cols: Dict[str, str] = {'loser_name': 'player', 'loser_id': 'player_id', 'winner_name': 'opponent', 'winner_id': 'opponent_id',
-                                  'loser_rank': 'rank', 'winner_rank': 'opponent_rank', 'l_ace': 'ace', 'l_df': 'df', 'l_svpt': 'svpt',
+                                  'loser_rank': 'rank', 'winner_rank': 'opponent_rank',
+                                  'loser_rank_points': 'rank_points', 'winner_rank_points': 'opponent_rank_points',
+                                  'l_ace': 'ace', 'l_df': 'df', 'l_svpt': 'svpt',
                                   'l_1stIn': '1stIn', 'l_1stWon': '1stWon', 'l_2ndWon': '2ndWon', 'l_bpSaved': 'bpSaved', 'l_bpFaced': 'bpFaced'}
 
         df_w: pd.DataFrame = df_copy[actual_common + list(w_cols.keys())].rename(columns=w_cols).copy()
@@ -105,6 +113,83 @@ class FeatureEngineer:
         df_copy['days_since'] = df_copy['days_since'].fillna(365)
         return df_copy
 
+    def _add_surface_rolling(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Surface-specific rolling win rate. Groups by (player, surface) to capture clay/grass/hard specialisation."""
+        df_copy: pd.DataFrame = df.copy()
+        surf_win = (
+            df_copy.groupby(['player', 'surface'])['win_pct']
+            .apply(lambda x: x.shift(1).rolling(window=self.window, min_periods=1).mean())
+        )
+        if isinstance(surf_win.index, pd.MultiIndex):
+            surf_win = surf_win.reset_index(level=[0, 1], drop=True)
+        df_copy['surf_win_pct_roll'] = surf_win.sort_index()
+        return df_copy
+
+    def _add_serve_stats(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Derive serve efficiency ratios per match then roll them. bpSaved/bpFaced already in long format."""
+        df_copy: pd.DataFrame = df.copy()
+        df_copy['bp_save_rate'] = np.where(
+            df_copy['bpFaced'] > 0, df_copy['bpSaved'] / df_copy['bpFaced'], np.nan
+        )
+        df_copy['first_srv_win_pct'] = np.where(
+            df_copy['1stIn'] > 0, df_copy['1stWon'] / df_copy['1stIn'], np.nan
+        )
+        df_copy['second_srv_win_pct'] = np.where(
+            (df_copy['svpt'] - df_copy['1stIn']) > 0,
+            df_copy['2ndWon'] / (df_copy['svpt'] - df_copy['1stIn']),
+            np.nan
+        )
+        serve_cols: List[str] = [c for c in ['bp_save_rate', 'first_srv_win_pct', 'second_srv_win_pct'] if c in df_copy.columns]
+        grouped = df_copy.groupby('player')[serve_cols]
+        rolled = grouped.apply(lambda x: x.shift(1).rolling(window=self.window, min_periods=1).mean())
+        if isinstance(rolled.index, pd.MultiIndex):
+            rolled = rolled.reset_index(level=0, drop=True)
+        rolled = rolled.sort_index()
+        rolled.columns = [f"{c}_roll" for c in rolled.columns]
+        return pd.concat([df_copy, rolled], axis=1)
+
+    def _add_streak_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Signed consecutive win/loss streak per player. Uses shift(1) to prevent leakage."""
+        df_copy: pd.DataFrame = df.copy()
+
+        def _streak(series: pd.Series) -> pd.Series:
+            shifted = series.shift(1).values
+            streaks = np.zeros(len(series), dtype=float)
+            current = 0.0
+            prev = np.nan
+            for i, val in enumerate(shifted):
+                if np.isnan(val):
+                    current = 0.0
+                    prev = np.nan
+                elif np.isnan(prev):
+                    current = 1.0 if val == 1 else -1.0
+                    prev = val
+                elif val == prev:
+                    current = current + 1.0 if val == 1 else current - 1.0
+                else:
+                    current = 1.0 if val == 1 else -1.0
+                    prev = val
+                streaks[i] = current
+            return pd.Series(streaks, index=series.index)
+
+        streak_vals = df_copy.groupby('player')['label'].apply(_streak)
+        if isinstance(streak_vals.index, pd.MultiIndex):
+            streak_vals = streak_vals.reset_index(level=0, drop=True)
+        df_copy['streak'] = streak_vals.sort_index()
+        return df_copy
+
+    def _add_rank_trend(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Rank momentum: positive = player rank is worsening, negative = improving."""
+        df_copy: pd.DataFrame = df.copy()
+        rank_roll_5 = (
+            df_copy.groupby('player')['rank']
+            .apply(lambda x: x.shift(1).rolling(window=5, min_periods=1).mean())
+        )
+        if isinstance(rank_roll_5.index, pd.MultiIndex):
+            rank_roll_5 = rank_roll_5.reset_index(level=0, drop=True)
+        df_copy['rank_trend'] = df_copy['rank'] - rank_roll_5.sort_index()
+        return df_copy
+
     def _add_h2h_features(self, df: pd.DataFrame) -> pd.DataFrame:
         df_copy: pd.DataFrame = df.copy()
         df_copy['win'] = df_copy['label']
@@ -119,13 +204,29 @@ class FeatureEngineer:
         df_copy['h2h_count'] = count_series
         df_copy['h2h_win_rate'] = df_copy['h2h_wins'] / df_copy['h2h_count'].replace(0, np.nan)
         df_copy['h2h_win_rate'] = df_copy['h2h_win_rate'].fillna(0.5)
+
+        # Surface-specific H2H
+        surf_grp: pd.core.groupby.generic.DataFrameGroupBy = df_copy.groupby(['player', 'opponent', 'surface'])
+        surf_wins: pd.Series = surf_grp['win'].apply(lambda x: x.shift(1).cumsum()).fillna(0)
+        surf_count: pd.Series = surf_grp['win'].apply(lambda x: x.shift(1).expanding().count()).fillna(0)
+
+        if isinstance(surf_wins.index, pd.MultiIndex): surf_wins = surf_wins.droplevel([0, 1, 2])
+        if isinstance(surf_count.index, pd.MultiIndex): surf_count = surf_count.droplevel([0, 1, 2])
+
+        df_copy['surf_h2h_wins'] = surf_wins
+        df_copy['surf_h2h_count'] = surf_count
+        df_copy['surf_h2h_win_rate'] = df_copy['surf_h2h_wins'] / df_copy['surf_h2h_count'].replace(0, np.nan)
+        df_copy['surf_h2h_win_rate'] = df_copy['surf_h2h_win_rate'].fillna(0.5)
+
         return df_copy.drop(columns=['win'])
 
     def _pivot_to_match_format(self, long_df: pd.DataFrame) -> pd.DataFrame:
         roll_cols: List[str] = [c for c in long_df.columns if '_roll' in c]
         lag_cols: List[str] = [c for c in long_df.columns if '_lag' in c]
 
-        meta_cols: List[str] = ['match_uid', 'tourney_date', 'match_num', 'player', 'opponent', 'surface', 'tourney_level', 'round', 'label', 'rank', 'days_since', 'h2h_win_rate']
+        meta_cols: List[str] = ['match_uid', 'tourney_date', 'match_num', 'player', 'opponent', 'surface', 'tourney_level', 'round', 'label',
+                               'rank', 'rank_points', 'days_since',
+                               'h2h_win_rate', 'surf_h2h_win_rate', 'streak', 'rank_trend']
         
         if 'is_inference' in long_df.columns:
             meta_cols.append('is_inference')
@@ -149,13 +250,28 @@ class FeatureEngineer:
 
     def _add_diff_features(self, df: pd.DataFrame) -> pd.DataFrame:
         df_copy: pd.DataFrame = df.copy()
-        features: List[str] = ['ace_roll', 'df_roll', 'win_pct_roll', 'rank', '1stIn_pct_roll', 'svpt_roll']
+        features: List[str] = [
+            'ace_roll', 'df_roll', 'win_pct_roll', 'rank', '1stIn_pct_roll', 'svpt_roll',
+            'surf_win_pct_roll', 'bp_save_rate_roll', 'first_srv_win_pct_roll',
+        ]
         for f in features:
             if f in df_copy.columns and f"opponent_{f}" in df_copy.columns:
                 df_copy[f"{f}_diff"] = df_copy[f] - df_copy[f"opponent_{f}"]
 
         lag_features: List[str] = ['ace_lag', 'df_lag', 'win_pct_lag', '1stIn_pct_lag', 'svpt_lag']
         for f in lag_features:
+            if f in df_copy.columns and f"opponent_{f}" in df_copy.columns:
+                df_copy[f"{f}_diff"] = df_copy[f] - df_copy[f"opponent_{f}"]
+
+        # Log-transformed rank points diff (more linear than rank ordinal)
+        if 'rank_points' in df_copy.columns and 'opponent_rank_points' in df_copy.columns:
+            df_copy['rank_pts_diff'] = (
+                np.log1p(df_copy['rank_points'].fillna(1)) -
+                np.log1p(df_copy['opponent_rank_points'].fillna(1))
+            )
+
+        # Diffs for non-roll meta features
+        for f in ['streak', 'surf_h2h_win_rate', 'rank_trend']:
             if f in df_copy.columns and f"opponent_{f}" in df_copy.columns:
                 df_copy[f"{f}_diff"] = df_copy[f] - df_copy[f"opponent_{f}"]
 

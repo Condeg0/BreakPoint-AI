@@ -56,3 +56,321 @@ F1 Score:    0.6428
 2026-02-26 14:33:15 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (12124, 76)
 2026-02-26 14:35:15 | INFO     | src.features | >>> Starting Feature Engineering...
 2026-02-26 14:35:20 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (12124, 76)
+2026-04-03 11:40:24 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 11:40:26 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (5834, 75)
+2026-04-03 11:40:38 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 11:40:40 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (5834, 75)
+2026-04-03 11:42:22 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 11:42:24 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (5834, 75)
+2026-04-03 14:09:26 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:09:42 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (26348, 99)
+2026-04-03 14:11:32 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:11:46 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (26348, 98)
+2026-04-03 14:12:03 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 14:12:04 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 14:12:04 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:13:40 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 14:13:42 | INFO     | src.training | 
+==================================================
+2026-04-03 14:13:42 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: XGBOOST
+2026-04-03 14:13:42 | INFO     | src.training | ==================================================
+2026-04-03 14:13:42 | INFO     | src.training | Training XGBoostModel...
+2026-04-03 14:13:43 | INFO     | src.training | [XGBoost] Train AUC: 0.7162 | Val AUC: 0.6998 | Best Iteration: 5
+2026-04-03 14:13:43 | INFO     | src.training | Model saved to artifacts/20260403_141340/xgboost/model.joblib
+2026-04-03 14:13:44 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR XGBOOST...
+2026-04-03 14:13:44 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7049
+Accuracy:    0.6477
+Precision:   0.6490
+Recall:      0.6430
+F1 Score:    0.6460
+========================================
+        
+2026-04-03 14:13:44 | INFO     | src.evaluation |    - Starting SHAP calculation for xgboost...
+2026-04-03 14:13:45 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 14:13:45 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_141340/xgboost
+2026-04-03 14:14:31 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 14:14:31 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 14:14:31 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:16:11 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 14:16:13 | INFO     | src.training | 
+==================================================
+2026-04-03 14:16:13 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: XGBOOST
+2026-04-03 14:16:13 | INFO     | src.training | ==================================================
+2026-04-03 14:16:13 | INFO     | src.training | Training XGBoostModel...
+2026-04-03 14:16:14 | INFO     | src.training | [XGBoost] Train AUC: 0.7325 | Val AUC: 0.7048 | Best Iteration: 142
+2026-04-03 14:16:14 | INFO     | src.training | Model saved to artifacts/20260403_141611/xgboost/model.joblib
+2026-04-03 14:16:14 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR XGBOOST...
+2026-04-03 14:16:14 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7167
+Accuracy:    0.6507
+Precision:   0.6503
+Recall:      0.6519
+F1 Score:    0.6511
+========================================
+        
+2026-04-03 14:16:15 | INFO     | src.evaluation |    - Starting SHAP calculation for xgboost...
+2026-04-03 14:16:15 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 14:16:15 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_141611/xgboost
+2026-04-03 14:16:29 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 14:16:30 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 14:16:30 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:18:09 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 14:18:10 | INFO     | src.training | 
+==================================================
+2026-04-03 14:18:10 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: XGBOOST
+2026-04-03 14:18:10 | INFO     | src.training | ==================================================
+2026-04-03 14:18:10 | INFO     | src.training | Training XGBoostModel...
+2026-04-03 14:18:12 | INFO     | src.training | [XGBoost] Train AUC: 0.7366 | Val AUC: 0.7050 | Best Iteration: 214
+2026-04-03 14:18:12 | INFO     | src.training | Model saved to artifacts/20260403_141809/xgboost/model.joblib
+2026-04-03 14:18:12 | INFO     | src.training | 
+==================================================
+2026-04-03 14:18:12 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: RANDOM_FOREST
+2026-04-03 14:18:12 | INFO     | src.training | ==================================================
+2026-04-03 14:18:12 | INFO     | src.training | Training RandomForestBaseline...
+2026-04-03 14:18:24 | INFO     | src.training | [RandomForestBaseline] Train AUC: 0.7298 | Val AUC: 0.7034
+2026-04-03 14:18:24 | INFO     | src.training | Model saved to artifacts/20260403_141809/random_forest/model.joblib
+2026-04-03 14:18:24 | INFO     | src.training | 
+==================================================
+2026-04-03 14:18:24 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: LOGISTIC_REGRESSION
+2026-04-03 14:18:24 | INFO     | src.training | ==================================================
+2026-04-03 14:18:24 | INFO     | src.training | Training LogisticBaseline...
+2026-04-03 14:18:25 | INFO     | src.training | [LogisticBaseline] Train AUC: 0.7178 | Val AUC: 0.6968
+2026-04-03 14:18:25 | INFO     | src.training | Model saved to artifacts/20260403_141809/logistic_regression/model.joblib
+2026-04-03 14:18:26 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR XGBOOST...
+2026-04-03 14:18:26 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7185
+Accuracy:    0.6523
+Precision:   0.6531
+Recall:      0.6498
+F1 Score:    0.6514
+========================================
+        
+2026-04-03 14:18:26 | INFO     | src.evaluation |    - Starting SHAP calculation for xgboost...
+2026-04-03 14:18:27 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 14:18:27 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_141809/xgboost
+2026-04-03 14:18:27 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR RANDOM_FOREST...
+2026-04-03 14:18:27 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7112
+Accuracy:    0.6500
+Precision:   0.6502
+Recall:      0.6491
+F1 Score:    0.6497
+========================================
+        
+2026-04-03 14:18:28 | INFO     | src.evaluation |    - Starting SHAP calculation for random_forest...
+2026-04-03 14:18:28 | ERROR    | src.evaluation |    ! Critical Error generating SHAP plots: '_CalibratedClassifier' object has no attribute 'base_estimator'
+Traceback (most recent call last):
+  File "/home/conderafael/Programing/Portfolio/tennis-forecast/src/evaluation.py", line 152, in _explain_model
+    base_est: Any = base_model.calibrated_classifiers_[0].base_estimator
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: '_CalibratedClassifier' object has no attribute 'base_estimator'
+2026-04-03 14:18:28 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_141809/random_forest
+2026-04-03 14:18:28 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR LOGISTIC_REGRESSION...
+2026-04-03 14:18:28 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7086
+Accuracy:    0.6505
+Precision:   0.6505
+Recall:      0.6505
+F1 Score:    0.6505
+========================================
+        
+2026-04-03 14:18:28 | INFO     | src.evaluation |    - Starting SHAP calculation for logistic_regression...
+2026-04-03 14:18:29 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 14:18:29 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_141809/logistic_regression
+2026-04-03 14:18:59 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 14:19:00 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 14:19:00 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:20:37 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 14:20:38 | INFO     | src.models.stacking | 
+>>> Meta-Learner Weights Learned:
+2026-04-03 14:20:38 | INFO     | src.models.stacking |     (XGBoost meta-learner — weights not expressed as linear coefficients)
+2026-04-03 14:20:38 | INFO     | src.models.stacking | Stacking Meta-Learner saved to artifacts/20260403_142037/stacking
+2026-04-03 14:20:39 | INFO     | src.models.stacking | Stacking Meta-Learner loaded from artifacts/20260403_142037/stacking
+2026-04-03 14:20:39 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR STACKING...
+2026-04-03 14:20:39 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7168
+Accuracy:    0.6535
+Precision:   0.6410
+Recall:      0.6979
+F1 Score:    0.6683
+========================================
+        
+2026-04-03 14:20:40 | INFO     | src.evaluation |    - Starting SHAP calculation for stacking...
+2026-04-03 14:20:40 | ERROR    | src.evaluation |    ! Critical Error generating SHAP plots: An unknown model type was passed: <class 'xgboost.sklearn.XGBClassifier'>
+Traceback (most recent call last):
+  File "/home/conderafael/Programing/Portfolio/tennis-forecast/src/evaluation.py", line 161, in _explain_model
+    explainer = shap.LinearExplainer(base_est, X_train)
+  File "/home/conderafael/Programing/Portfolio/tennis-forecast/.venv/lib/python3.14/site-packages/shap/explainers/_linear.py", line 129, in __init__
+    self.coef, self.intercept = LinearExplainer._parse_model(model)
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/conderafael/Programing/Portfolio/tennis-forecast/.venv/lib/python3.14/site-packages/shap/explainers/_linear.py", line 311, in _parse_model
+    raise InvalidModelError("An unknown model type was passed: " + str(type(model)))
+shap.utils._exceptions.InvalidModelError: An unknown model type was passed: <class 'xgboost.sklearn.XGBClassifier'>
+2026-04-03 14:20:40 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_142037/stacking
+2026-04-03 14:21:22 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 14:21:22 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 14:21:22 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:23:01 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 14:23:02 | INFO     | src.models.stacking | 
+>>> Meta-Learner Weights Learned:
+2026-04-03 14:23:02 | INFO     | src.models.stacking |     (XGBoost meta-learner — weights not expressed as linear coefficients)
+2026-04-03 14:23:02 | INFO     | src.models.stacking | Stacking Meta-Learner saved to artifacts/20260403_142301/stacking
+2026-04-03 14:23:03 | INFO     | src.models.stacking | Stacking Meta-Learner loaded from artifacts/20260403_142301/stacking
+2026-04-03 14:23:03 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR STACKING...
+2026-04-03 14:23:03 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7168
+Accuracy:    0.6535
+Precision:   0.6410
+Recall:      0.6979
+F1 Score:    0.6683
+========================================
+        
+2026-04-03 14:23:03 | INFO     | src.evaluation |    - Starting SHAP calculation for stacking...
+2026-04-03 14:23:04 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 14:23:04 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_142301/stacking
+2026-04-03 14:33:36 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 14:33:36 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 14:33:36 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 14:35:11 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 14:35:12 | INFO     | src.training | 
+==================================================
+2026-04-03 14:35:12 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: XGBOOST
+2026-04-03 14:35:12 | INFO     | src.training | ==================================================
+2026-04-03 14:35:12 | INFO     | src.training | Training XGBoostModel...
+2026-04-03 14:35:13 | INFO     | src.training | [XGBoost] Train AUC: 0.7376 | Val AUC: 0.7046 | Best Iteration: 233
+2026-04-03 14:35:13 | INFO     | src.training | Model saved to artifacts/20260403_143511/xgboost/model.joblib
+2026-04-03 14:35:13 | INFO     | src.training | 
+==================================================
+2026-04-03 14:35:13 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: RANDOM_FOREST
+2026-04-03 14:35:13 | INFO     | src.training | ==================================================
+2026-04-03 14:35:13 | INFO     | src.training | Training RandomForestBaseline...
+2026-04-03 14:35:24 | INFO     | src.training | [RandomForestBaseline] Train AUC: 0.7298 | Val AUC: 0.7033
+2026-04-03 14:35:24 | INFO     | src.training | Model saved to artifacts/20260403_143511/random_forest/model.joblib
+2026-04-03 14:35:24 | INFO     | src.training | 
+==================================================
+2026-04-03 14:35:24 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: LOGISTIC_REGRESSION
+2026-04-03 14:35:24 | INFO     | src.training | ==================================================
+2026-04-03 14:35:24 | INFO     | src.training | Training LogisticBaseline...
+2026-04-03 14:35:25 | INFO     | src.training | [LogisticBaseline] Train AUC: 0.7178 | Val AUC: 0.6968
+2026-04-03 14:35:25 | INFO     | src.training | Model saved to artifacts/20260403_143511/logistic_regression/model.joblib
+2026-04-03 14:35:25 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR XGBOOST...
+2026-04-03 14:35:25 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7191
+Accuracy:    0.6551
+Precision:   0.6554
+Recall:      0.6544
+F1 Score:    0.6549
+========================================
+        
+2026-04-03 14:35:26 | INFO     | src.evaluation |    - Starting SHAP calculation for xgboost...
+2026-04-03 14:35:26 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 14:35:26 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_143511/xgboost
+2026-04-03 14:35:26 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR RANDOM_FOREST...
+2026-04-03 14:35:26 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7112
+Accuracy:    0.6505
+Precision:   0.6505
+Recall:      0.6505
+F1 Score:    0.6505
+========================================
+        
+2026-04-03 14:35:27 | INFO     | src.evaluation |    - Starting SHAP calculation for random_forest...
+2026-04-03 14:35:27 | ERROR    | src.evaluation |    ! Critical Error generating SHAP plots: '_CalibratedClassifier' object has no attribute 'base_estimator'
+Traceback (most recent call last):
+  File "/home/conderafael/Programing/Portfolio/tennis-forecast/src/evaluation.py", line 152, in _explain_model
+    base_est: Any = base_model.calibrated_classifiers_[0].base_estimator
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: '_CalibratedClassifier' object has no attribute 'base_estimator'
+2026-04-03 14:35:27 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_143511/random_forest
+2026-04-03 14:35:27 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR LOGISTIC_REGRESSION...
+2026-04-03 14:35:27 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7086
+Accuracy:    0.6505
+Precision:   0.6505
+Recall:      0.6505
+F1 Score:    0.6505
+========================================
+        
+2026-04-03 14:35:27 | INFO     | src.evaluation |    - Starting SHAP calculation for logistic_regression...
+2026-04-03 14:35:27 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 14:35:27 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_143511/logistic_regression
+2026-04-03 15:27:47 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 15:27:47 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 15:27:47 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 15:29:23 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 15:29:24 | INFO     | src.training | 
+==================================================
+2026-04-03 15:29:24 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: LSTM
+2026-04-03 15:29:24 | INFO     | src.training | ==================================================
+2026-04-03 15:30:09 | INFO     | src.training | Epoch 1 | Loss: 0.6214 | Val Loss: 0.6250 | Val AUC: 0.7023
+2026-04-03 15:30:52 | INFO     | src.training | Epoch 2 | Loss: 0.6149 | Val Loss: 0.6237 | Val AUC: 0.7032
+2026-04-03 15:31:37 | INFO     | src.training | Epoch 3 | Loss: 0.6139 | Val Loss: 0.6234 | Val AUC: 0.7044
+2026-04-03 15:32:20 | INFO     | src.training | Epoch 4 | Loss: 0.6128 | Val Loss: 0.6229 | Val AUC: 0.7045
+2026-04-03 15:33:04 | INFO     | src.training | Epoch 5 | Loss: 0.6120 | Val Loss: 0.6210 | Val AUC: 0.7066
+2026-04-03 15:33:47 | INFO     | src.training | Epoch 6 | Loss: 0.6113 | Val Loss: 0.6210 | Val AUC: 0.7059
+2026-04-03 15:34:31 | INFO     | src.training | Epoch 7 | Loss: 0.6110 | Val Loss: 0.6206 | Val AUC: 0.7066
+2026-04-03 15:35:15 | INFO     | src.training | Epoch 8 | Loss: 0.6100 | Val Loss: 0.6207 | Val AUC: 0.7061
+2026-04-03 15:35:58 | INFO     | src.training | Epoch 9 | Loss: 0.6099 | Val Loss: 0.6214 | Val AUC: 0.7058
+2026-04-03 15:36:42 | INFO     | src.training | Epoch 10 | Loss: 0.6095 | Val Loss: 0.6210 | Val AUC: 0.7060
+2026-04-03 15:36:42 | WARNING  | src.training | Early stopping triggered.
+2026-04-03 15:36:42 | INFO     | src.training | Best Val AUC: 0.7066
+2026-04-03 15:36:43 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR LSTM...
+2026-04-03 15:36:43 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7140
+Accuracy:    0.6550
+Precision:   0.6534
+Recall:      0.6601
+F1 Score:    0.6567
+========================================
+        
+2026-04-03 15:36:44 | INFO     | src.evaluation |    - Starting SHAP calculation for lstm...
+2026-04-03 15:36:44 | INFO     | src.evaluation |    - Configuring KernelExplainer for LSTM (this is slow)...
+2026-04-03 15:36:44 | INFO     | src.evaluation |      Running KernelExplainer on 20 samples...
+2026-04-03 15:39:09 | WARNING  | src.evaluation | Feature name mismatch: Names=211, SHAP=171. Truncating.
+2026-04-03 15:39:09 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 15:39:09 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_152923/lstm

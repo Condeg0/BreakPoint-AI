@@ -2,7 +2,8 @@ import joblib
 import numpy as np
 from pathlib import Path
 from sklearn.linear_model import LogisticRegression
-from typing import Dict, List, Any, Self
+from xgboost import XGBClassifier
+from typing import Dict, List, Any, Self, Union
 
 from src.config import ProjectConfig
 from src.logger import get_logger
@@ -17,8 +18,15 @@ class StackingMetaLearner:
         self.stacking_dir.mkdir(parents=True, exist_ok=True)
         
         meta_learner_type: str = config.models.stacking.meta_learner
+        self.meta_model: Union[LogisticRegression, XGBClassifier]
         if meta_learner_type == "logistic_regression":
-            self.meta_model: LogisticRegression = LogisticRegression(C=10.0, solver='lbfgs')
+            self.meta_model = LogisticRegression(C=10.0, solver='lbfgs')
+        elif meta_learner_type == "xgboost":
+            self.meta_model = XGBClassifier(
+                n_estimators=100, max_depth=2, learning_rate=0.05,
+                subsample=0.8, objective="binary:logistic", eval_metric="auc",
+                n_jobs=-1, random_state=42
+            )
         else:
             raise ValueError(f"Unsupported meta-learner: {meta_learner_type}")
             
@@ -34,9 +42,12 @@ class StackingMetaLearner:
         self.meta_model.fit(X_meta, y_val)
         
         logger.info("\n>>> Meta-Learner Weights Learned:")
-        for name, weight in zip(self.model_names, self.meta_model.coef_[0]):
-            logger.info(f"    - {name}: {weight:.4f}")
-        logger.info(f"    - Intercept: {self.meta_model.intercept_[0]:.4f}")
+        if hasattr(self.meta_model, 'coef_'):
+            for name, weight in zip(self.model_names, self.meta_model.coef_[0]):
+                logger.info(f"    - {name}: {weight:.4f}")
+            logger.info(f"    - Intercept: {self.meta_model.intercept_[0]:.4f}")
+        else:
+            logger.info("    (XGBoost meta-learner — weights not expressed as linear coefficients)")
 
     def predict_proba(self, predictions_dict: Dict[str, np.ndarray]) -> np.ndarray:
         # Guarantee we pull probabilities in the exact same order they were fitted

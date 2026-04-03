@@ -11,6 +11,7 @@ data:
     test_start: "2024-01-01"
   features:
     context:
+      # --- Original 8 ---
       - "rank_diff"
       - "rank"
       - "opponent_rank"
@@ -19,6 +20,24 @@ data:
       - "win_pct_roll_diff"
       - "h2h_win_rate"
       - "days_since"
+      # --- Already computed, never exposed ---
+      - "1stIn_pct_roll_diff"
+      - "svpt_roll_diff"
+      - "win_pct_lag_diff"
+      - "ace_lag_diff"
+      - "df_lag_diff"
+      # --- New features ---
+      - "rank_pts_diff"
+      - "surf_win_pct_roll_diff"
+      - "bp_save_rate_roll_diff"
+      - "first_srv_win_pct_roll_diff"
+      - "streak_diff"
+      - "rank_trend_diff"
+      - "surf_h2h_win_rate_diff"
+      # --- Absolute values for interaction effects ---
+      - "surf_win_pct_roll"
+      - "streak"
+      - "rank_trend"
     sequence:
       - "ace"
       - "df"
@@ -31,13 +50,14 @@ data:
       - "loser_rank"
     categorical:
       - "surface"
+      - "tourney_level"
     target: "label"
 
 pipeline:
-  models_to_train: ["xgboost"]  # "lstm", "xgboost", "random_forest", "logistic_regression", "stacking"
-  stacking_base_artifact_dir: 'artifacts/20260219_174038'
+  models_to_train: ["lstm"]  # "lstm", "xgboost", "random_forest", "logistic_regression", "stacking"
+  stacking_base_artifact_dir: 'artifacts/20260403_141809'  # point to latest base model run before running stacking
   # To use stacking models need to be trained at the same time, thus they remain in the same directory
-  use_stacking: true  # boolean
+  use_stacking: false  # boolean
   run_evaluation: true # boolean
   # --- Inference Model Location ---
   inference_artifact_dir: "model_prod" # Model to run inference
@@ -53,17 +73,20 @@ models:
       dropout: 0.25
     training:
       batch_size: 64
-      epochs: 30
+      epochs: 75
       learning_rate: 0.0002
       tuning_enabled: false
 
   xgboost:
     hyperparameters:
-      n_estimators: 200
-      max_depth: 6
+      n_estimators: 400
+      max_depth: 5
       learning_rate: 0.05
       subsample: 0.8
-      colsample_bytree: 0.8
+      colsample_bytree: 0.7
+      min_child_weight: 3
+      reg_alpha: 0.05
+      reg_lambda: 1.5
     training:
       tuning_enabled: false
 
@@ -84,5 +107,5 @@ models:
       tuning_enabled: false
 
   stacking:
-    meta_learner: "logistic_regression"
+    meta_learner: "xgboost"
     cv_folds: 5

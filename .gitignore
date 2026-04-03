@@ -16,6 +16,8 @@ data/
 notebooks/
 BreakPointAI-DOCS.md
 story.txt
+CLAUDE.md
+technical_improvements.md
 
 # --- Artifact Isolation (CRITICAL FOR GITOPS) ---
 # Ignore all historical research checkpoints to prevent repository bloat
