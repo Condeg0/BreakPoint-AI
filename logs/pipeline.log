@@ -374,3 +374,178 @@ F1 Score:    0.6567
 2026-04-03 15:39:09 | WARNING  | src.evaluation | Feature name mismatch: Names=211, SHAP=171. Truncating.
 2026-04-03 15:39:09 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
 2026-04-03 15:39:09 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_152923/lstm
+2026-04-03 22:54:18 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 22:54:19 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 22:54:19 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 22:55:51 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 22:55:52 | INFO     | src.training | 
+==================================================
+2026-04-03 22:55:52 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: LSTM
+2026-04-03 22:55:52 | INFO     | src.training | ==================================================
+2026-04-03 22:56:35 | INFO     | src.training | Epoch 1 | Loss: 0.6215 | Val Loss: 0.6258 | Val AUC: 0.7014
+2026-04-03 22:57:16 | INFO     | src.training | Epoch 2 | Loss: 0.6151 | Val Loss: 0.6227 | Val AUC: 0.7048
+2026-04-03 22:57:57 | INFO     | src.training | Epoch 3 | Loss: 0.6142 | Val Loss: 0.6233 | Val AUC: 0.7040
+2026-04-03 22:58:38 | INFO     | src.training | Epoch 4 | Loss: 0.6128 | Val Loss: 0.6215 | Val AUC: 0.7063
+2026-04-03 22:59:18 | INFO     | src.training | Epoch 5 | Loss: 0.6119 | Val Loss: 0.6205 | Val AUC: 0.7070
+2026-04-03 22:59:59 | INFO     | src.training | Epoch 6 | Loss: 0.6113 | Val Loss: 0.6199 | Val AUC: 0.7075
+2026-04-03 23:00:41 | INFO     | src.training | Epoch 7 | Loss: 0.6106 | Val Loss: 0.6202 | Val AUC: 0.7064
+2026-04-03 23:01:23 | INFO     | src.training | Epoch 8 | Loss: 0.6101 | Val Loss: 0.6205 | Val AUC: 0.7067
+2026-04-03 23:02:04 | INFO     | src.training | Epoch 9 | Loss: 0.6094 | Val Loss: 0.6209 | Val AUC: 0.7064
+2026-04-03 23:02:46 | INFO     | src.training | Epoch 10 | Loss: 0.6092 | Val Loss: 0.6218 | Val AUC: 0.7060
+2026-04-03 23:03:27 | INFO     | src.training | Epoch 11 | Loss: 0.6090 | Val Loss: 0.6204 | Val AUC: 0.7069
+2026-04-03 23:03:27 | WARNING  | src.training | Early stopping triggered.
+2026-04-03 23:03:27 | INFO     | src.training | Best Val AUC: 0.7075
+2026-04-03 23:03:29 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR LSTM...
+2026-04-03 23:03:29 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7148
+Accuracy:    0.6521
+Precision:   0.6508
+Recall:      0.6566
+F1 Score:    0.6537
+========================================
+        
+2026-04-03 23:03:29 | INFO     | src.evaluation |    - Starting SHAP calculation for lstm...
+2026-04-03 23:03:29 | INFO     | src.evaluation |    - Configuring KernelExplainer for LSTM (this is slow)...
+2026-04-03 23:03:29 | INFO     | src.evaluation |      Running KernelExplainer on 20 samples...
+2026-04-03 23:05:50 | WARNING  | src.evaluation | Feature name mismatch: Names=211, SHAP=171. Truncating.
+2026-04-03 23:05:51 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-03 23:05:51 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_225551/lstm
+2026-04-03 23:07:56 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 23:07:56 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 23:07:56 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 23:09:33 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 23:09:35 | INFO     | src.training | 
+==================================================
+2026-04-03 23:09:35 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: LSTM
+2026-04-03 23:09:35 | INFO     | src.training | ==================================================
+2026-04-03 23:09:35 | INFO     | src.training | tuning_enabled=True — running Optuna search before final training...
+2026-04-03 23:15:10 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-03 23:15:11 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-03 23:15:11 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-03 23:16:46 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 98)
+2026-04-03 23:16:47 | INFO     | src.training | 
+==================================================
+2026-04-03 23:16:47 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: LSTM
+2026-04-03 23:16:47 | INFO     | src.training | ==================================================
+2026-04-03 23:16:47 | INFO     | src.training | tuning_enabled=True — running Optuna search before final training...
+2026-04-04 00:11:20 | INFO     | src.training | Optuna best params applied: {'hidden_size': 64, 'num_layers': 1, 'dropout': 0.4181116484237747, 'learning_rate': 0.00011021563224015452, 'batch_size': 64}
+2026-04-04 00:11:57 | INFO     | src.training | Epoch 1 | Loss: 0.6297 | Val Loss: 0.6277 | Val AUC: 0.6995
+2026-04-04 00:12:35 | INFO     | src.training | Epoch 2 | Loss: 0.6189 | Val Loss: 0.6253 | Val AUC: 0.7015
+2026-04-04 00:13:13 | INFO     | src.training | Epoch 3 | Loss: 0.6176 | Val Loss: 0.6244 | Val AUC: 0.7022
+2026-04-04 00:13:51 | INFO     | src.training | Epoch 4 | Loss: 0.6158 | Val Loss: 0.6239 | Val AUC: 0.7034
+2026-04-04 00:14:29 | INFO     | src.training | Epoch 5 | Loss: 0.6153 | Val Loss: 0.6224 | Val AUC: 0.7042
+2026-04-04 00:15:07 | INFO     | src.training | Epoch 6 | Loss: 0.6149 | Val Loss: 0.6234 | Val AUC: 0.7038
+2026-04-04 00:15:45 | INFO     | src.training | Epoch 7 | Loss: 0.6145 | Val Loss: 0.6219 | Val AUC: 0.7051
+2026-04-04 00:16:23 | INFO     | src.training | Epoch 8 | Loss: 0.6138 | Val Loss: 0.6217 | Val AUC: 0.7053
+2026-04-04 00:17:00 | INFO     | src.training | Epoch 9 | Loss: 0.6135 | Val Loss: 0.6214 | Val AUC: 0.7052
+2026-04-04 00:17:38 | INFO     | src.training | Epoch 10 | Loss: 0.6130 | Val Loss: 0.6214 | Val AUC: 0.7055
+2026-04-04 00:18:16 | INFO     | src.training | Epoch 11 | Loss: 0.6132 | Val Loss: 0.6210 | Val AUC: 0.7059
+2026-04-04 00:18:53 | INFO     | src.training | Epoch 12 | Loss: 0.6122 | Val Loss: 0.6207 | Val AUC: 0.7064
+2026-04-04 00:19:31 | INFO     | src.training | Epoch 13 | Loss: 0.6120 | Val Loss: 0.6217 | Val AUC: 0.7051
+2026-04-04 00:19:47 | INFO     | src.training | Optuna best params applied: {'hidden_size': 48, 'num_layers': 2, 'dropout': 0.11428197458463524, 'learning_rate': 0.0003427651631286195, 'batch_size': 256}
+2026-04-04 00:20:11 | INFO     | src.training | Epoch 14 | Loss: 0.6120 | Val Loss: 0.6209 | Val AUC: 0.7056
+2026-04-04 00:20:22 | INFO     | src.training | Epoch 1 | Loss: 0.6223 | Val Loss: 0.6257 | Val AUC: 0.7027
+2026-04-04 00:20:52 | INFO     | src.training | Epoch 15 | Loss: 0.6118 | Val Loss: 0.6209 | Val AUC: 0.7057
+2026-04-04 00:20:56 | INFO     | src.training | Epoch 2 | Loss: 0.6136 | Val Loss: 0.6245 | Val AUC: 0.7033
+2026-04-04 00:21:31 | INFO     | src.training | Epoch 3 | Loss: 0.6124 | Val Loss: 0.6223 | Val AUC: 0.7059
+2026-04-04 00:21:32 | INFO     | src.training | Epoch 16 | Loss: 0.6112 | Val Loss: 0.6207 | Val AUC: 0.7060
+2026-04-04 00:22:06 | INFO     | src.training | Epoch 4 | Loss: 0.6112 | Val Loss: 0.6222 | Val AUC: 0.7060
+2026-04-04 00:22:12 | INFO     | src.training | Epoch 17 | Loss: 0.6112 | Val Loss: 0.6213 | Val AUC: 0.7059
+2026-04-04 00:22:12 | WARNING  | src.training | Early stopping triggered.
+2026-04-04 00:22:12 | INFO     | src.training | Best Val AUC: 0.7064
+2026-04-04 00:22:13 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR LSTM...
+2026-04-04 00:22:13 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7135
+Accuracy:    0.6505
+Precision:   0.6513
+Recall:      0.6480
+F1 Score:    0.6496
+========================================
+        
+2026-04-04 00:22:14 | INFO     | src.evaluation |    - Starting SHAP calculation for lstm...
+2026-04-04 00:22:14 | INFO     | src.evaluation |    - Configuring KernelExplainer for LSTM (this is slow)...
+2026-04-04 00:22:14 | INFO     | src.evaluation |      Running KernelExplainer on 20 samples...
+2026-04-04 00:22:40 | INFO     | src.training | Epoch 5 | Loss: 0.6101 | Val Loss: 0.6217 | Val AUC: 0.7071
+2026-04-04 00:23:15 | INFO     | src.training | Epoch 6 | Loss: 0.6093 | Val Loss: 0.6226 | Val AUC: 0.7067
+2026-04-04 00:23:49 | INFO     | src.training | Epoch 7 | Loss: 0.6088 | Val Loss: 0.6209 | Val AUC: 0.7069
+2026-04-04 00:24:24 | INFO     | src.training | Epoch 8 | Loss: 0.6086 | Val Loss: 0.6213 | Val AUC: 0.7071
+2026-04-04 00:24:32 | WARNING  | src.evaluation | Feature name mismatch: Names=211, SHAP=171. Truncating.
+2026-04-04 00:24:32 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-04 00:24:32 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_230933/lstm
+2026-04-04 00:24:59 | INFO     | src.training | Epoch 9 | Loss: 0.6081 | Val Loss: 0.6206 | Val AUC: 0.7084
+2026-04-04 00:25:33 | INFO     | src.training | Epoch 10 | Loss: 0.6074 | Val Loss: 0.6214 | Val AUC: 0.7069
+2026-04-04 00:26:07 | INFO     | src.training | Epoch 11 | Loss: 0.6070 | Val Loss: 0.6206 | Val AUC: 0.7075
+2026-04-04 00:26:41 | INFO     | src.training | Epoch 12 | Loss: 0.6068 | Val Loss: 0.6213 | Val AUC: 0.7074
+2026-04-04 00:27:15 | INFO     | src.training | Epoch 13 | Loss: 0.6062 | Val Loss: 0.6216 | Val AUC: 0.7080
+2026-04-04 00:27:50 | INFO     | src.training | Epoch 14 | Loss: 0.6059 | Val Loss: 0.6213 | Val AUC: 0.7070
+2026-04-04 00:27:50 | WARNING  | src.training | Early stopping triggered.
+2026-04-04 00:27:50 | INFO     | src.training | Best Val AUC: 0.7084
+2026-04-04 00:27:51 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR LSTM...
+2026-04-04 00:27:51 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7143
+Accuracy:    0.6521
+Precision:   0.6513
+Recall:      0.6548
+F1 Score:    0.6530
+========================================
+        
+2026-04-04 00:27:51 | INFO     | src.evaluation |    - Starting SHAP calculation for lstm...
+2026-04-04 00:27:51 | INFO     | src.evaluation |    - Configuring KernelExplainer for LSTM (this is slow)...
+2026-04-04 00:27:51 | INFO     | src.evaluation |      Running KernelExplainer on 20 samples...
+2026-04-04 00:30:19 | WARNING  | src.evaluation | Feature name mismatch: Names=211, SHAP=171. Truncating.
+2026-04-04 00:30:19 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-04 00:30:19 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260403_231646/lstm
+2026-04-04 10:24:24 | INFO     | src.data | Merging 35 raw CSV files...
+2026-04-04 10:24:24 | INFO     | src.data | Data Splitting Complete: Train=96270, Val=2766, Test=2807
+2026-04-04 10:24:24 | INFO     | src.features | >>> Starting Feature Engineering...
+2026-04-04 10:25:57 | INFO     | src.features | >>> Feature Engineering Complete. Shape: (203686, 102)
+2026-04-04 10:25:58 | INFO     | src.training | 
+==================================================
+2026-04-04 10:25:58 | INFO     | src.training | >>> 🔍 INITIALIZING TRAINING PIPELINE: LSTM
+2026-04-04 10:25:58 | INFO     | src.training | ==================================================
+2026-04-04 10:25:58 | INFO     | src.training | tuning_enabled=True — running Optuna search before final training...
+2026-04-04 11:37:20 | INFO     | src.training | Optuna best params applied: {'hidden_size': 80, 'num_layers': 3, 'dropout': 0.2943280378640176, 'learning_rate': 0.0008218759238815786, 'weight_decay': 1.6062008965792186e-05, 'fusion_dim': 64, 'batch_size': 128}
+2026-04-04 11:37:57 | INFO     | src.training | Epoch 1 | Loss: 0.6207 | Val Loss: 0.6243 | Val AUC: 0.7033
+2026-04-04 11:38:34 | INFO     | src.training | Epoch 2 | Loss: 0.6153 | Val Loss: 0.6227 | Val AUC: 0.7052
+2026-04-04 11:39:11 | INFO     | src.training | Epoch 3 | Loss: 0.6138 | Val Loss: 0.6228 | Val AUC: 0.7054
+2026-04-04 11:39:48 | INFO     | src.training | Epoch 4 | Loss: 0.6126 | Val Loss: 0.6211 | Val AUC: 0.7071
+2026-04-04 11:40:25 | INFO     | src.training | Epoch 5 | Loss: 0.6118 | Val Loss: 0.6205 | Val AUC: 0.7077
+2026-04-04 11:41:02 | INFO     | src.training | Epoch 6 | Loss: 0.6110 | Val Loss: 0.6215 | Val AUC: 0.7080
+2026-04-04 11:41:39 | INFO     | src.training | Epoch 7 | Loss: 0.6100 | Val Loss: 0.6186 | Val AUC: 0.7104
+2026-04-04 11:42:16 | INFO     | src.training | Epoch 8 | Loss: 0.6087 | Val Loss: 0.6222 | Val AUC: 0.7065
+2026-04-04 11:42:53 | INFO     | src.training | Epoch 9 | Loss: 0.6077 | Val Loss: 0.6213 | Val AUC: 0.7066
+2026-04-04 11:43:30 | INFO     | src.training | Epoch 10 | Loss: 0.6061 | Val Loss: 0.6228 | Val AUC: 0.7066
+2026-04-04 11:44:07 | INFO     | src.training | Epoch 11 | Loss: 0.6048 | Val Loss: 0.6231 | Val AUC: 0.7042
+2026-04-04 11:44:44 | INFO     | src.training | Epoch 12 | Loss: 0.6011 | Val Loss: 0.6252 | Val AUC: 0.7025
+2026-04-04 11:44:44 | WARNING  | src.training | Early stopping triggered.
+2026-04-04 11:44:44 | INFO     | src.training | Best Val AUC: 0.7104
+2026-04-04 11:44:45 | INFO     | src.evaluation | 
+>>> 📊 GENERATING EVALUATION REPORT FOR LSTM...
+2026-04-04 11:44:45 | INFO     | src.evaluation | 
+========================================
+        MODEL PERFORMANCE REPORT
+========================================
+AUC Score:   0.7134
+Accuracy:    0.6532
+Precision:   0.6492
+Recall:      0.6665
+F1 Score:    0.6578
+========================================
+        
+2026-04-04 11:44:46 | INFO     | src.evaluation |    - Starting SHAP calculation for lstm...
+2026-04-04 11:44:46 | INFO     | src.evaluation |    - Configuring KernelExplainer for LSTM (this is slow)...
+2026-04-04 11:44:46 | INFO     | src.evaluation |      Running KernelExplainer on 20 samples...
+2026-04-04 11:48:03 | INFO     | src.evaluation |    - SHAP Summary Plot saved successfully.
+2026-04-04 11:48:03 | INFO     | src.evaluation | >>> Evaluation Complete. Reports saved to artifacts/20260404_102557/lstm

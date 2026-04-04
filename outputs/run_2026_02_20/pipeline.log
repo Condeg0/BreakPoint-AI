@@ -308,3 +308,75 @@
 --- Evaluating lstm on Test Set ---
 2026-04-03 15:39:09 | INFO     | __main__ | 
 >>> Global Execution Complete. All artifacts saved to: artifacts/20260403_152923
+2026-04-03 22:54:18 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 22:54:18 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 22:54:19 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 22:55:51 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 22:55:51 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 22:55:52 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 22:55:52 | INFO     | __main__ | 
+--- Initiating Base Model Run: lstm ---
+2026-04-03 23:03:27 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-03 23:03:28 | INFO     | __main__ | 
+--- Evaluating lstm on Test Set ---
+2026-04-03 23:05:51 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_225551
+2026-04-03 23:07:56 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 23:07:56 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 23:07:56 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 23:09:33 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 23:09:33 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 23:09:35 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 23:09:35 | INFO     | __main__ | 
+--- Initiating Base Model Run: lstm ---
+2026-04-03 23:15:10 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-03 23:15:10 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-03 23:15:11 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-03 23:16:46 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-03 23:16:46 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-03 23:16:47 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-03 23:16:47 | INFO     | __main__ | 
+--- Initiating Base Model Run: lstm ---
+2026-04-04 00:22:12 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-04 00:22:12 | INFO     | __main__ | 
+--- Evaluating lstm on Test Set ---
+2026-04-04 00:24:32 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_230933
+2026-04-04 00:27:50 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-04 00:27:50 | INFO     | __main__ | 
+--- Evaluating lstm on Test Set ---
+2026-04-04 00:30:19 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260403_231646
+2026-04-04 10:24:24 | INFO     | __main__ | Loading config from configs/config.yaml...
+2026-04-04 10:24:24 | INFO     | __main__ | 
+>>> Phase 1: Data Ingestion
+2026-04-04 10:24:24 | INFO     | __main__ | 
+>>> Phase 2: Feature Engineering
+2026-04-04 10:25:57 | INFO     | __main__ | Featured Data: Train=192540, Val=5532, Test=5614
+2026-04-04 10:25:57 | INFO     | __main__ | 
+>>> Phase 3: Preprocessing Setup
+2026-04-04 10:25:58 | INFO     | __main__ | 
+>>> Phase 4: Model Execution
+2026-04-04 10:25:58 | INFO     | __main__ | 
+--- Initiating Base Model Run: lstm ---
+2026-04-04 11:44:44 | INFO     | __main__ | 
+>>> Phase 5: Evaluation & Artifact Logging
+2026-04-04 11:44:44 | INFO     | __main__ | 
+--- Evaluating lstm on Test Set ---
+2026-04-04 11:48:03 | INFO     | __main__ | 
+>>> Global Execution Complete. All artifacts saved to: artifacts/20260404_102557

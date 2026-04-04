@@ -18,25 +18,34 @@ class SiameseLSTM(nn.Module):
             dropout=lstm_cfg.dropout if lstm_cfg.num_layers > 1 else 0
         )
 
+        # Shared attention over all hidden states (consistent with Siamese design)
+        self.attention: nn.Linear = nn.Linear(lstm_cfg.hidden_size, 1)
+
         fusion_input_dim: int = (lstm_cfg.hidden_size * 2) + context_dim
+        fd: int = lstm_cfg.fusion_dim
 
         self.fusion: nn.Sequential = nn.Sequential(
-            nn.Linear(fusion_input_dim, 64),
+            nn.Linear(fusion_input_dim, fd),
             nn.ReLU(),
             nn.Dropout(lstm_cfg.dropout),
-            nn.Linear(64, 32),
+            nn.Linear(fd, fd // 2),
             nn.ReLU(),
             nn.Dropout(lstm_cfg.dropout),
-            nn.Linear(32, 1) # Output logit
+            nn.Linear(fd // 2, 1)
         )
 
-    def forward(self, seq_a: torch.Tensor, seq_b: torch.Tensor, context: torch.Tensor) -> torch.Tensor:
-        # Note: h_n shape is (num_layers, batch, hidden_size)
-        _, (h_n_a, _) = self.lstm(seq_a)
-        emb_a: torch.Tensor = h_n_a[-1]  # Get last layer's hidden state
+    def _attend(self, lstm_out: torch.Tensor) -> torch.Tensor:
+        """Weighted sum of LSTM hidden states via learned attention."""
+        scores: torch.Tensor = self.attention(lstm_out)          # (batch, seq_len, 1)
+        weights: torch.Tensor = torch.softmax(scores, dim=1)     # (batch, seq_len, 1)
+        return (weights * lstm_out).sum(dim=1)                   # (batch, hidden_size)
 
-        _, (h_n_b, _) = self.lstm(seq_b)
-        emb_b: torch.Tensor = h_n_b[-1]
+    def forward(self, seq_a: torch.Tensor, seq_b: torch.Tensor, context: torch.Tensor) -> torch.Tensor:
+        out_a, _ = self.lstm(seq_a)   # (batch, seq_len, hidden_size)
+        emb_a: torch.Tensor = self._attend(out_a)
+
+        out_b, _ = self.lstm(seq_b)
+        emb_b: torch.Tensor = self._attend(out_b)
 
         combined: torch.Tensor = torch.cat([emb_a, emb_b, context], dim=1)
         return self.fusion(combined)

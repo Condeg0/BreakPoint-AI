@@ -91,7 +91,24 @@ class Trainer:
 
     def _train_lstm(self, train_ds: TennisDataset, val_ds: TennisDataset) -> SiameseLSTM:
         lstm_train_cfg = self.config.models.lstm.training
-        
+
+        if lstm_train_cfg.tuning_enabled:
+            from src.tuning import Tuner
+            logger.info("tuning_enabled=True — running Optuna search before final training...")
+            tuner: Tuner = Tuner(self.config, train_ds, val_ds)
+            best_params: dict = tuner.optimize(n_trials=20)
+
+            # Patch best params back into config so the final training run uses them
+            self.config.models.lstm.architecture.hidden_size = best_params["hidden_size"]
+            self.config.models.lstm.architecture.num_layers = best_params["num_layers"]
+            self.config.models.lstm.architecture.dropout = best_params["dropout"]
+            self.config.models.lstm.training.learning_rate = best_params["learning_rate"]
+            self.config.models.lstm.training.batch_size = best_params["batch_size"]
+
+            self.config.models.lstm.architecture.fusion_dim = best_params.get("fusion_dim", 64)
+            lstm_train_cfg = self.config.models.lstm.training
+            logger.info(f"Optuna best params applied: {best_params}")
+
         train_loader: DataLoader = DataLoader(train_ds, batch_size=lstm_train_cfg.batch_size, shuffle=True)
         val_loader: DataLoader = DataLoader(val_ds, batch_size=lstm_train_cfg.batch_size, shuffle=False)
 
@@ -100,6 +117,9 @@ class Trainer:
 
         model: SiameseLSTM = SiameseLSTM(self.config, input_dim, context_dim).to(self.device)
         optimizer: optim.Optimizer = optim.Adam(model.parameters(), lr=lstm_train_cfg.learning_rate)
+        scheduler: torch.optim.lr_scheduler.ReduceLROnPlateau = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='max', factor=0.5, patience=3
+        )
         criterion: nn.Module = nn.BCEWithLogitsLoss()
 
         best_val_auc: float = 0.0
@@ -120,12 +140,14 @@ class Trainer:
                 logits: torch.Tensor = model(seq_a, seq_b, ctx)
                 loss: torch.Tensor = criterion(logits, y_tensor)
                 loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                 optimizer.step()
 
                 train_loss += loss.item()
 
             avg_train_loss: float = train_loss / len(train_loader)
             val_auc, val_loss = self._evaluate_lstm(model, val_loader, criterion)
+            scheduler.step(val_auc)
 
             logger.info(f"Epoch {epoch+1} | Loss: {avg_train_loss:.4f} | Val Loss: {val_loss:.4f} | Val AUC: {val_auc:.4f}")
 

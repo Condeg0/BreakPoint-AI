@@ -21,10 +21,12 @@ class Tuner:
 
     def objective(self, trial: optuna.Trial) -> float:
         # 1. Define Search Space
-        hidden_size: int = trial.suggest_int("hidden_size", 16, 128, step=16)
-        num_layers: int = trial.suggest_int("num_layers", 1, 2)
-        dropout: float = trial.suggest_float("dropout", 0.1, 0.5)
-        lr: float = trial.suggest_float("learning_rate", 1e-4, 1e-2, log=True)
+        hidden_size: int = trial.suggest_int("hidden_size", 32, 128, step=16)
+        num_layers: int = trial.suggest_int("num_layers", 1, 3)
+        dropout: float = trial.suggest_float("dropout", 0.2, 0.5)
+        lr: float = trial.suggest_float("learning_rate", 5e-5, 3e-3, log=True)
+        weight_decay: float = trial.suggest_float("weight_decay", 1e-5, 1e-2, log=True)
+        fusion_dim: int = trial.suggest_categorical("fusion_dim", [64, 128, 256])
         batch_size: int = trial.suggest_categorical("batch_size", [64, 128, 256])
 
         # 2. Setup DataLoaders
@@ -36,16 +38,17 @@ class Tuner:
         temp_config.models.lstm.architecture.hidden_size = hidden_size
         temp_config.models.lstm.architecture.num_layers = num_layers
         temp_config.models.lstm.architecture.dropout = dropout
+        temp_config.models.lstm.architecture.fusion_dim = fusion_dim
 
         input_dim: int = self.train_ds.seq_matrix.shape[1]
         context_dim: int = self.train_ds.ctx_matrix.shape[1]
 
         model: SiameseLSTM = SiameseLSTM(temp_config, input_dim, context_dim).to(self.device)
-        optimizer: optim.Optimizer = optim.Adam(model.parameters(), lr=lr)
+        optimizer: optim.Optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
         criterion: nn.Module = nn.BCEWithLogitsLoss()
 
-        # 4. Quick Training Loop
-        for epoch in range(10):
+        # 4. Quick Training Loop (15 epochs for better convergence signal at low LR)
+        for epoch in range(15):
             model.train()
             for seq_a, seq_b, ctx, y in train_loader:
                 seq_a, seq_b, ctx, y = seq_a.to(self.device), seq_b.to(self.device), ctx.to(self.device), y.to(self.device).unsqueeze(1)

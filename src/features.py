@@ -231,7 +231,7 @@ class FeatureEngineer:
         if 'is_inference' in long_df.columns:
             meta_cols.append('is_inference')
 
-        raw_cols: List[str] = ['ace', 'df', 'svpt', '1stIn', '1stWon', '2ndWon']
+        raw_cols: List[str] = ['ace', 'df', 'svpt', '1stIn', '1stWon', '2ndWon', 'bp_save_rate', 'first_srv_win_pct']
 
         cols_to_keep: List[str] = meta_cols + roll_cols + lag_cols + raw_cols
         cols_to_keep = [c for c in cols_to_keep if c in long_df.columns]

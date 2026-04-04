@@ -43,6 +43,7 @@ class LSTMArch(BaseModel):
     hidden_size: int
     num_layers: int
     dropout: float
+    fusion_dim: int = 64
 
 class LSTMConfig(BaseModel):
     architecture: LSTMArch

@@ -46,8 +46,8 @@ data:
       - "1stWon"
       - "2ndWon"
       - "rank"
-      - "winner_rank"
-      - "loser_rank"
+      - "bp_save_rate"
+      - "first_srv_win_pct"
     categorical:
       - "surface"
       - "tourney_level"
@@ -75,7 +75,7 @@ models:
       batch_size: 64
       epochs: 75
       learning_rate: 0.0002
-      tuning_enabled: false
+      tuning_enabled: true
 
   xgboost:
     hyperparameters:
